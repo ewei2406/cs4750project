@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import os
 
 from src.deps.lifespan import lifespan
 from src.routers import attempts, puzzles, ratings, users
@@ -18,4 +19,6 @@ def health_check():
     return {"status": "ok"}
 
 # Serve the UI
-app.mount("/", StaticFiles(directory="dist", html=True), name="static")
+static_dir = 'dist'
+os.makedirs(static_dir, exist_ok=True)
+app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")
