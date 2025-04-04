@@ -9,4 +9,10 @@ dependencies = [
     "fastapi[standard]>=0.115.12",
     "psycopg-pool>=3.2.6",
     "psycopg[binary]>=3.2.6",
+    "pytest>=8.3.5",
+]
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
 ]
