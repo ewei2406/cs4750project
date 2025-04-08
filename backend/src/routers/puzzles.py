@@ -208,7 +208,7 @@ async def create_puzzle(
             await cur.execute(
                 """
                 select puzzle_id, solution,
-                    category1, category2, category3, category4,
+                    category1, category2, category3, category4
                 from Connections
                 where puzzle_id = %s;
                 """,
