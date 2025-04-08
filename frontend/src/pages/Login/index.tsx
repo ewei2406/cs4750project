@@ -12,7 +12,7 @@ const Login = () => {
 			<p className="subtitle">Play. Compete. Climb the leaderboard.</p>
 
 			<div className="button-group">
-				<button className="play-button crossword">Play Crossword</button>
+				<button className="play-button crossword" onClick={() => navigate("/browseCrosswords")}>Play Crossword</button>
 				<button className="play-button connections" onClick={() => navigate("/browseConnections")}>Play Connections</button>
 			</div>
 
