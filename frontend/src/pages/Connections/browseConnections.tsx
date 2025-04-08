@@ -1,5 +1,5 @@
-import React from 'react';
-import "./browseConnections.css"; 
+import React, { useState } from 'react';
+import "./browseConnections.css";
 
 interface Puzzle {
   puzzle_id: number;
@@ -7,7 +7,8 @@ interface Puzzle {
 }
 
 const ConnectionsPage: React.FC = () => {
-  // Hardcoded list of "Connections" puzzles
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const puzzles: Puzzle[] = [
     { puzzle_id: 1, puzzle_name: 'Connections Puzzle 1' },
     { puzzle_id: 2, puzzle_name: 'Connections Puzzle 2' },
@@ -17,6 +18,22 @@ const ConnectionsPage: React.FC = () => {
 
   return (
     <div className="connections-page">
+      <div className="hamburger-container">
+        <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+          ☰
+        </div>
+        {menuOpen && (
+          <div className="dropdown-menu">
+            <button onClick={() => alert('Switching to Crosswords')}>
+              Browse Crosswords
+            </button>
+            <button onClick={() => alert('You are on Connections')}>
+              Browse Connections
+            </button>
+          </div>
+        )}
+      </div>
+
       <h1>Choose a Connections Game</h1>
       <div className="puzzle-list">
         {puzzles.map((puzzle) => (
