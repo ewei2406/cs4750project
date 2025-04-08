@@ -39,19 +39,19 @@
 }
 
 .play-button.crossword {
-	background-color: #3b82f6; 
+	background-color: #bba9da; 
 }
 
 .play-button.crossword:hover {
-	background-color: #2563eb; 
+	background-color: #a193ba; 
 }
 
 .play-button.connections {
-	background-color: #10b981; 
+	background-color: #e1be71; 
 }
 
 .play-button.connections:hover {
-	background-color: #059669; 
+	background-color: #bf9945; 
 }
 
 .toggle-view {

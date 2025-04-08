@@ -1,0 +1,41 @@
+/* App.css or ConnectionsPage.css */
+.crosswords-page {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .puzzle-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .puzzle-item {
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    text-align: center;
+  }
+  
+  .puzzle-item h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .puzzle-item button {
+    padding: 8px 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .puzzle-item button:hover {
+    background-color: #0056b3;
+  }
+  
