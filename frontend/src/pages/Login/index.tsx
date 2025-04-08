@@ -1,8 +1,10 @@
 import "./index.css";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
 	const [view, setView] = useState("login");
+	const navigate = useNavigate();
 
 	return (
 		<div className="home-container">
@@ -11,7 +13,7 @@ const Login = () => {
 
 			<div className="button-group">
 				<button className="play-button crossword">Play Crossword</button>
-				<button className="play-button connections">Play Connections</button>
+				<button className="play-button connections" onClick={() => navigate("/browseConnections")}>Play Connections</button>
 			</div>
 
 			<div className="toggle-view">
