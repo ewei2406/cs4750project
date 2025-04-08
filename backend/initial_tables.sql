@@ -50,17 +50,16 @@ create table if not exists Attempts(
 	user_id int references Users(user_id) on delete cascade, 
 	puzzle_id int references Puzzles(puzzle_id) on delete cascade, 
 	
-	start_at timestamp not null default now(),
-	finish_at timestamp,
+	updated_at timestamp not null default now(),
 	attempt text not null default '',
 	attempt_num int not null default 0,
 	solved boolean not null default false,
-	score int not null default 0,
+	score int not null default 0, 
 
-	message text,
+	message json default '{}'::json,
 
 	primary key(user_id, puzzle_id),
-	constraint finish_at_constraint check (finish_at is null or finish_at >= start_at)
+	constraint score_constraint check (score >= 0 and score <= 100)
 );
 
 -- mini subclass
@@ -137,6 +136,22 @@ before update on Puzzles
 for each row
 execute function update_puzzle();
 
+
+-- Update the updated_at timestamp when an attempt is updated
+create or replace function update_attempt() returns trigger as $$
+begin
+	if new.updated_at = old.updated_at then
+		new.updated_at = now();
+	end if;
+	return new;
+end;
+$$ language plpgsql;
+
+create trigger update_attempt_trigger
+before update on Attempts
+for each row
+execute function update_attempt();
+
 -- Views
 
 -- Puzzles with Stats
@@ -152,12 +167,12 @@ order by updated_at desc;
 
 -- Attempts
 create view attempt_stats as
-select A.user_id, A.puzzle_id, A.start_at, A.finish_at, A.attempt_num, A.solved, A.score,
-		U.username, P.puzzle_name
+select A.user_id, A.puzzle_id, A.updated_at, A.attempt_num, A.solved, A.score,
+		U.username, P.puzzle_name, A.message, A.attempt
 from Attempts A
 join Users as U on A.user_id = U.user_id
 join Puzzles as P on A.puzzle_id = P.puzzle_id
-order by A.start_at desc;
+order by A.updated_at desc;
 
 -- Ratings
 create view rating_stats as
@@ -176,7 +191,7 @@ select
 		(select count(*) as solved_ct from attempts a where a.user_id = u.user_id and a.solved = true),
 		(select count(*) as rating_ct from ratings r where r.user_id = u.user_id)
 from users u
-order by puzzle_ct;
+order by puzzle_ct desc;
 
 -- Dummy data
 insert into Users (username, password, is_admin) values

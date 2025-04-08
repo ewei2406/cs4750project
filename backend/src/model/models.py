@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict
 from pydantic.alias_generators import to_camel
@@ -41,16 +42,16 @@ class Rating(CamelModel):
 
 
 class Attempt(CamelModel):
-    user_id: int
+    user_id: int | None
     username: str
     puzzle_id: int
     puzzle_name: str
+    attempt: str
     attempt_num: int
     score: int
-    start_at: datetime
-    finish_at: datetime | None
+    updated_at: datetime
     solved: bool
-    message: str | None # Any responses from most recent attempt
+    message: Any
 
 
 class UserStats(CamelModel):

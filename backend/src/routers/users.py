@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from typing_extensions import Literal
 
 from src.deps.auth import UserAuth
 from src.deps.db import GetDB
@@ -40,10 +41,17 @@ async def me(user: UserAuth) -> User:
 
 
 @router.get("/stats")
-async def get_all_user_stats(db: GetDB) -> list[UserStats]:
+async def get_all_user_stats(
+    db: GetDB, order_by: Literal["puzzle_ct", "rating_ct", "solved_ct"] | None = None
+) -> list[UserStats]:
     async with db.cursor() as cur:
         await cur.execute(
-            """select user_id, username, is_admin, solved_ct, attempt_ct, rating_ct from user_stats;"""
+            f"""
+            select 
+                user_id, username, is_admin, puzzle_ct, solved_ct, rating_ct 
+            from user_stats
+            order by {order_by if order_by else "puzzle_ct"} desc;
+            """,
         )
         users_stats = [
             UserStats(
@@ -114,7 +122,9 @@ async def get_user_attempts(user_id: int, db: GetDB) -> list[Attempt]:
     async with db.cursor() as cur:
         await cur.execute(
             """
-            select user_id, username, puzzle_id, puzzle_name, attempt_num, score, start_at, finish_at, solved
+            select 
+                user_id, username, puzzle_id, puzzle_name, attempt, attempt_num,
+                score, updated_at, solved, message
             from attempt_stats
             where user_id = %s;
             """,
@@ -126,11 +136,12 @@ async def get_user_attempts(user_id: int, db: GetDB) -> list[Attempt]:
                 username=attempt[1],
                 puzzle_id=attempt[2],
                 puzzle_name=attempt[3],
-                attempt_num=attempt[4],
-                score=attempt[5],
-                start_at=attempt[6],
-                finish_at=attempt[7],
+                attempt=attempt[4],
+                attempt_num=attempt[5],
+                score=attempt[6],
+                updated_at=attempt[7],
                 solved=attempt[8],
+                message=attempt[9],
             )
             for attempt in await cur.fetchall()
         ]
@@ -168,7 +179,7 @@ async def get_user_stats(user_id: int, db: GetDB) -> UserStats:
     async with db.cursor() as cur:
         await cur.execute(
             """
-            select user_id, username, is_admin, puzzle_ct, attempt_ct, rating_ct 
+            select user_id, username, is_admin, puzzle_ct, solved_ct, rating_ct 
             from user_stats
             where user_id = %s;
             """,
@@ -181,7 +192,7 @@ async def get_user_stats(user_id: int, db: GetDB) -> UserStats:
                 username=user[1],
                 is_admin=user[2],
                 puzzle_ct=user[3],
-                attempt_ct=user[4],
+                solved_ct=user[4],
                 rating_ct=user[5],
             )
         else:
