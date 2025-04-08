@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 
 from src.deps.auth import UserAuth
 from src.deps.db import GetDB
-from src.model.models import Attempt, Puzzle, Rating, User, UserStats
+from src.model.models import Attempt, PuzzleStats, Rating, User, UserStats
 
 router = APIRouter(
     prefix="/users",
@@ -81,7 +81,7 @@ async def get_user(user_id: int, db: GetDB) -> User:
 
 
 @router.get("/{user_id}/puzzles")
-async def get_user_puzzles(user_id: int, db: GetDB) -> list[Puzzle]:
+async def get_user_puzzles(user_id: int, db: GetDB) -> list[PuzzleStats]:
     async with db.cursor() as cur:
         await cur.execute(
             """
@@ -93,7 +93,7 @@ async def get_user_puzzles(user_id: int, db: GetDB) -> list[Puzzle]:
             (user_id,),
         )
         puzzles = [
-            Puzzle(
+            PuzzleStats(
                 puzzle_id=puzzle[0],
                 created_user_id=puzzle[1],
                 puzzle_name=puzzle[2],

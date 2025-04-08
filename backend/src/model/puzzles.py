@@ -1,11 +1,12 @@
 from typing import Literal, Union
 
-from src.model.models import CamelModel
+from pydantic import Field
+
+from src.model.models import CamelModel, PuzzleStats
 
 
 class Mini(CamelModel):
     solution: str
-    gaps: str
     across1: str
     across2: str
     across3: str
@@ -18,35 +19,28 @@ class Mini(CamelModel):
     down5: str
 
 
-class MiniUpdate(Mini):
+class MiniDiscrim(CamelModel):
     type: Literal["mini"]
+    data: Mini
 
 
 class Connection(CamelModel):
-    c1: str
-    c1w1: str
-    c1w2: str
-    c1w3: str
-    c1w4: str
-    c2: str
-    c2w1: str
-    c2w2: str
-    c2w3: str
-    c2w4: str
-    c3: str
-    c3w1: str
-    c3w2: str
-    c3w3: str
-    c3w4: str
-    c4: str
-    c4w1: str
-    c4w2: str
-    c4w3: str
-    c4w4: str
+    solution: str
+    category1: str
+    category2: str
+    category3: str
+    category4: str
 
 
-class ConnectionUpdate(Connection):
+class ConnectionDiscrim(CamelModel):
     type: Literal["connections"]
+    data: Connection
 
 
-PuzzleUpdate = Union[MiniUpdate, ConnectionUpdate]
+class PuzzleUpdate(CamelModel):
+    puzzle_name: str
+    puzzle_data: Union[MiniDiscrim, ConnectionDiscrim] = Field(discriminator="type")
+
+
+class Puzzle(PuzzleStats):
+    puzzle_data: Union[MiniDiscrim, ConnectionDiscrim] = Field(discriminator="type")

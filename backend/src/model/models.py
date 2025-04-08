@@ -18,7 +18,7 @@ class User(CamelModel):
     is_admin: bool
 
 
-class Puzzle(CamelModel):
+class PuzzleStats(CamelModel):
     puzzle_id: int
     created_user_id: int
     created_username: str
@@ -50,6 +50,7 @@ class Attempt(CamelModel):
     start_at: datetime
     finish_at: datetime | None
     solved: bool
+    message: str | None # Any responses from most recent attempt
 
 
 class UserStats(CamelModel):

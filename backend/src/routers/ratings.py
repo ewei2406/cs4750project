@@ -45,7 +45,7 @@ async def create_rating(
                 status_code=500,
                 detail="Failed to create rating",
             )
-        db.commit()
+        await db.commit()
         return Rating(
             puzzle_id=rating_out[0],
             user_id=rating_out[1],
@@ -91,7 +91,7 @@ async def update_rating(
                 status_code=404,
                 detail="Rating not found.",
             )
-        db.commit()
+        await db.commit()
         return Rating(
             puzzle_id=rating_out[0],
             user_id=rating_out[1],

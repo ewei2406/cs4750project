@@ -52,9 +52,12 @@ create table if not exists Attempts(
 	
 	start_at timestamp not null default now(),
 	finish_at timestamp,
+	attempt text not null default '',
 	attempt_num int not null default 0,
 	solved boolean not null default false,
 	score int not null default 0,
+
+	message text,
 
 	primary key(user_id, puzzle_id),
 	constraint finish_at_constraint check (finish_at is null or finish_at >= start_at)
@@ -64,50 +67,38 @@ create table if not exists Attempts(
 create table if not exists Minis (
 	puzzle_id int primary key references Puzzles(puzzle_id) on delete cascade,
 	
-	-- The mini is a grid of 5x5 letters, like a crossword
-	solution char(25) not null default '',
-	-- Gaps will have a space in the spots to indicate it is a gap (i.e. no characters there)
-	gaps char(25) not null default '',
+	-- The mini is a grid of 5x5 letters, like a crossword. Spaces are where 'gaps' are
+	solution char(25) not null default 'aaaaaaaaaaaaaaaaaaaaaaaaa',
 
 	-- Crossword clues
-	across1 varchar(255) not null default '',
-	across2 varchar(255) not null default '',
-	across3 varchar(255) not null default '',
-	across4 varchar(255) not null default '',
-	across5 varchar(255) not null default '',
+	across1 varchar(255) not null default 'across1',
+	across2 varchar(255) not null default 'across2',
+	across3 varchar(255) not null default 'across3',
+	across4 varchar(255) not null default 'across4',
+	across5 varchar(255) not null default 'across5',
 
-	down1 varchar(255) not null default '',
-	down2 varchar(255) not null default '',
-	down3 varchar(255) not null default '',
-	down4 varchar(255) not null default '',
-	down5 varchar(255) not null default ''
+	down1 varchar(255) not null default 'down1',
+	down2 varchar(255) not null default 'down2',
+	down3 varchar(255) not null default 'down3',
+	down4 varchar(255) not null default 'down4',
+	down5 varchar(255) not null default 'down5',
+
+	constraint solution_constraint check (solution ~ '^[a-z ]{25}$')
 );
 
 -- connections subclass
 create table if not exists Connections (
 	puzzle_id int primary key references Puzzles(puzzle_id) on delete cascade,
 
-	-- Connections always have 16 words, in 4 categories.
-	c1 varchar(255) not null default '',
-	c1w1 varchar(30) not null default '',
-	c1w2 varchar(30) not null default '',
-	c1w3 varchar(30) not null default '',
-	c1w4 varchar(30) not null default '',
-	c2 varchar(255) not null default '',
-	c2w1 varchar(30) not null default '',
-	c2w2 varchar(30) not null default '',
-	c2w3 varchar(30) not null default '',
-	c2w4 varchar(30) not null default '',
-	c3 varchar(255) not null default '',
-	c3w1 varchar(30) not null default '',
-	c3w2 varchar(30) not null default '',
-	c3w3 varchar(30) not null default '',
-	c3w4 varchar(30) not null default '',
-	c4 varchar(255) not null default '',
-	c4w1 varchar(30) not null default '',
-	c4w2 varchar(30) not null default '',
-	c4w3 varchar(30) not null default '',
-	c4w4 varchar(30) not null default ''
+	-- The solution is 4 groups of 4 words separated by semicolons, then commas.
+	solution text not null default 'a,b,c,d;e,f,g,h;i,j,k,l;m,n,o,p;',
+	-- The categories are a list of 4 words, separated by semicolons
+	category1 varchar(255) not null default 'category1',
+	category2 varchar(255) not null default 'category2',
+	category3 varchar(255) not null default 'category3',
+	category4 varchar(255) not null default 'category4',
+
+	constraint solution_constraint check (solution ~ '^(?:([^;,]+,){3}[^;,]+;){4}$')
 );
 
 -- Triggers
@@ -134,9 +125,9 @@ execute function insert_puzzle();
 -- Update the updated_at timestamp when a puzzle is updated
 create or replace function update_puzzle() returns trigger as $$
 begin
-	update Puzzles
-	set updated_at = now()
-	where puzzle_id = new.puzzle_id;
+	if new.updated_at = old.updated_at then
+		new.updated_at = now();
+	end if;
 	return new;
 end;
 $$ language plpgsql;
