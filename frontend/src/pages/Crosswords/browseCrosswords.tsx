@@ -1,28 +1,57 @@
-import React from 'react';
-import "./browseCrosswords.css"; 
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import "./browseCrosswords.css";
 
 interface Puzzle {
-  puzzle_id: number;
-  puzzle_name: string;
+  puzzleId: number;
+  puzzleName: string;
+  puzzleType: string;
 }
 
 const CrosswordPage: React.FC = () => {
-  // Hardcoded list of "Connections" puzzles
-  const puzzles: Puzzle[] = [
-    { puzzle_id: 1, puzzle_name: 'Puzzle 1' },
-    { puzzle_id: 2, puzzle_name: 'Puzzle 2' },
-    { puzzle_id: 3, puzzle_name: 'Puzzle 3' },
-    { puzzle_id: 4, puzzle_name: 'Puzzle 4' },
-  ];
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [puzzles, setPuzzles] = useState<Puzzle[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchPuzzles = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/puzzles/recent');
+        const data = await response.json();
+        const miniPuzzles = data.filter((p: Puzzle) => p.puzzleType === 'mini');
+        setPuzzles(miniPuzzles);
+      } catch (error) {
+        console.error('Error fetching puzzles:', error);
+      }
+    };
+
+    fetchPuzzles();
+  }, []);
 
   return (
     <div className="crossword-page">
+      <div className="hamburger-container">
+        <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+          ☰
+        </div>
+        {menuOpen && (
+          <div className="dropdown-menu">
+            <button onClick={() => alert('Switching to Crosswords')}>
+              Browse Crosswords
+            </button>
+            <button onClick={() => alert('You are on Connections')}>
+              Browse Connections
+            </button>
+          </div>
+        )}
+      </div>
+
       <h1>Choose a Crossword Game</h1>
       <div className="puzzle-list">
         {puzzles.map((puzzle) => (
-          <div key={puzzle.puzzle_id} className="puzzle-item">
-            <h3>{puzzle.puzzle_name}</h3>
-            <button onClick={() => alert(`Starting game: ${puzzle.puzzle_name}`)}>
+          <div key={puzzle.puzzleId} className="puzzle-item">
+            <h3>{puzzle.puzzleName}</h3>
+            <button onClick={() => navigate(`/crosswords/${puzzle.puzzleId}`)}>
               Start Game
             </button>
           </div>

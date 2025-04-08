@@ -1,20 +1,36 @@
-import React, { useState } from 'react';
-import "./browseConnections.css";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './browseConnections.css';
 
 interface Puzzle {
-  puzzle_id: number;
-  puzzle_name: string;
+  puzzleId: number;
+  puzzleName: string;
+  puzzleType: string;
 }
 
 const ConnectionsPage: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [puzzles, setPuzzles] = useState<Puzzle[]>([]);
+  const navigate = useNavigate();
 
-  const puzzles: Puzzle[] = [
-    { puzzle_id: 1, puzzle_name: 'Connections Puzzle 1' },
-    { puzzle_id: 2, puzzle_name: 'Connections Puzzle 2' },
-    { puzzle_id: 3, puzzle_name: 'Connections Puzzle 3' },
-    { puzzle_id: 4, puzzle_name: 'Connections Puzzle 4' },
-  ];
+  useEffect(() => {
+    const fetchPuzzles = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/puzzles/recent');
+        const data = await response.json();
+
+        // console.log("Fetched puzzles:", data);
+        // console.log("First puzzle (if exists):", data[0]);
+
+        const connectionsPuzzles = data.filter((p: Puzzle) => p.puzzleType === 'connections');
+        setPuzzles(connectionsPuzzles);
+      } catch (error) {
+        console.error('Error fetching puzzles:', error);
+      }
+    };
+
+    fetchPuzzles();
+  }, []);
 
   return (
     <div className="connections-page">
@@ -37,9 +53,9 @@ const ConnectionsPage: React.FC = () => {
       <h1>Choose a Connections Game</h1>
       <div className="puzzle-list">
         {puzzles.map((puzzle) => (
-          <div key={puzzle.puzzle_id} className="puzzle-item">
-            <h3>{puzzle.puzzle_name}</h3>
-            <button onClick={() => alert(`Starting game: ${puzzle.puzzle_name}`)}>
+          <div key={puzzle.puzzleId} className="puzzle-item">
+            <h3>{puzzle.puzzleName}</h3>
+            <button onClick={() => navigate(`/connections/${puzzle.puzzleId}`)}>
               Start Game
             </button>
           </div>
@@ -50,3 +66,4 @@ const ConnectionsPage: React.FC = () => {
 };
 
 export default ConnectionsPage;
+
