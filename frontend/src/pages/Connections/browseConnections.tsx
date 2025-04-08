@@ -40,13 +40,13 @@ const ConnectionsPage: React.FC = () => {
         </div>
         {menuOpen && (
           <div className="dropdown-menu">
-            <button onClick={() => alert('Switching to Crosswords')}>
-              Browse Crosswords
-            </button>
-            <button onClick={() => alert('You are on Connections')}>
-              Browse Connections
-            </button>
-          </div>
+          <button onClick={() => navigate("/browseCrosswords")}>
+            Browse Crosswords
+          </button>
+          <button onClick={() => navigate("/browseConnections")}>
+            Browse Connections
+          </button>
+        </div>
         )}
       </div>
 
