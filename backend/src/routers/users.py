@@ -124,7 +124,7 @@ async def get_user_attempts(user_id: int, db: GetDB) -> list[Attempt]:
             """
             select 
                 user_id, username, puzzle_id, puzzle_name, attempt, attempt_num,
-                score, updated_at, solved, message
+                score, updated_at, solved
             from attempt_stats
             where user_id = %s;
             """,
@@ -141,7 +141,7 @@ async def get_user_attempts(user_id: int, db: GetDB) -> list[Attempt]:
                 score=attempt[6],
                 updated_at=attempt[7],
                 solved=attempt[8],
-                message=attempt[9],
+                message={},
             )
             for attempt in await cur.fetchall()
         ]
