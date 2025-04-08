@@ -149,7 +149,7 @@ async def create_puzzle(
     user: UserAuth,
     puzzle_name: str,
     puzzle_type: Literal["mini", "connections"],
-) -> Puzzle:
+) -> int:
     async with db.cursor() as cur:
         await cur.execute(
             """
@@ -230,6 +230,7 @@ async def create_puzzle(
                     category4=puzzle_data[5],
                 ),
             )
+    return puzzle_id
 
 
 @router.put("/{puzzle_id}")
