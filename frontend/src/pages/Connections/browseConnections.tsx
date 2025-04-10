@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './browseConnections.css';
+import Button from '@/components/Button';
 
 interface Puzzle {
-  puzzleId: number;
-  puzzleName: string;
-  puzzleType: string;
-}
+    puzzleId: number;
+    puzzleName: string;
+    puzzleType: string;
+    createdUsername: string;
+    ratingCt: number;
+    ratingAvg: number | null;
+    solvedCt: number;
+  }
 
-const ConnectionsPage: React.FC = () => {
+const ConnectionsPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [puzzles, setPuzzles] = useState<Puzzle[]>([]);
   const navigate = useNavigate();
@@ -50,15 +55,38 @@ const ConnectionsPage: React.FC = () => {
         )}
       </div>
 
-      <h1>Choose a Connections Game</h1>
-      <div className="puzzle-list">
+      <h1 className="page-heading">Connect With A Game</h1>
+      <h3 className="page-subtext">Fresh challenges made by fellow players.</h3>
+
+      <div style={{ 
+        display: 'flex',
+        flexDirection: "column",
+        gap: 15,
+        width: 700,
+        margin: "0 auto"
+      }}>
         {puzzles.map((puzzle) => (
-          <div key={puzzle.puzzleId} className="puzzle-item">
-            <h3>{puzzle.puzzleName}</h3>
-            <button onClick={() => navigate(`/connections/${puzzle.puzzleId}`)}>
-              Start Game
-            </button>
-          </div>
+          <div style={{
+            background: "white",
+            padding: "12px 16px",
+            borderRadius: "12px",
+            boxShadow: "0 6px 12px rgba(0, 0, 0, 0.08)",
+            display: "grid",
+            alignItems: "center",
+            gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr"
+          }} key={puzzle.puzzleId}>
+            <div>{puzzle.puzzleName}</div>
+            <div style={{ color: 'gray' }}>by {puzzle.createdUsername}</div>
+            <div  style={{ color: 'gray' }}>
+            {puzzle.ratingCt > 0
+                ? `⭐ ${puzzle.ratingAvg?.toFixed(1)} (${puzzle.ratingCt})`
+                : `No ratings`}
+            </div>
+            <div  style={{ color: 'gray' }}>
+                {puzzle.solvedCt === 0 ? "No solves" : puzzle.solvedCt === 1 ? "1 solve" : `${puzzle.solvedCt} solves`}
+            </div>
+            <Button backgroundColor='var(--connections-color)' text="Start Game" onClick={() => navigate(`/connections/${puzzle.puzzleId}`)} />
+        </div>
         ))}
       </div>
     </div>
