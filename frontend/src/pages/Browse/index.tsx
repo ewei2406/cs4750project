@@ -22,8 +22,18 @@ const BrowseConnections = () => {
 
   return (
     <div className="connections-page">
-      <h1 className="page-heading">Connect With A Game</h1>
-      <h3 className="page-subtext">Fresh challenges made by fellow players.</h3>
+      <h1 style={{ textAlign: 'center', }}>
+        Connect With A Game
+      </h1>
+      <h3 style={{ 
+        textAlign: 'center',
+        color: '#666',
+        marginBottom: 24,
+        fontSize: 16,
+         }}>
+        Fresh challenges made by fellow players.
+      </h3>
+
 
       <PuzzleTable puzzles={result.data} />
     </div>

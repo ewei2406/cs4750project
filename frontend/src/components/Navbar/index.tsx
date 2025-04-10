@@ -1,27 +1,40 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useGet } from "@/hooks/useGet"; // adjust path if needed
+import "./index.css";
+
+type User = {
+  userId: number;
+  username: string;
+  isAdmin: boolean;
+};
 
 const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
+  const { result } = useGet<User>({ path: "/puzzle/me" });
+
   return (
-    <div className="hamburger-container">
-      <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-        ☰
+    <div className="navbar-container">
+      
+
+      <div className="navbar-right">
+        {result.status === "loading" && <span>Loading...</span>}
+
+        {result.status === "error" && (
+          <button
+            className="login-button"
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </button>
+        )}
+
+        {result.status === "success" && (
+          <span className="username">Hi, {result.data.username}</span>
+        )}
       </div>
-      {menuOpen && (
-        <div className="dropdown-menu">
-          <button onClick={() => navigate("/browseCrosswords")}>
-            Browse Crosswords
-          </button>
-          <button onClick={() => navigate("/browseConnections")}>
-            Browse Connections
-          </button>
-        </div>
-      )}
     </div>
   );
 };
 
-export default Navbar
+export default Navbar;

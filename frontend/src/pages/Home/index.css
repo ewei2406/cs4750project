@@ -71,3 +71,32 @@
 	text-decoration: none; 
 	color: #1d4ed8; 
 }
+
+/* Navbar.css */
+
+.login-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    position: relative;
+  }
+  
+  
+  
+  .login-button {
+    background-color: #5e675e;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .username {
+    color: #333;
+    font-weight: bold;
+  }
+
+
+  

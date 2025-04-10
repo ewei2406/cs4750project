@@ -39,24 +39,9 @@ const ConnectionsPage = () => {
 
   return (
     <div className="connections-page">
-      <div className="hamburger-container">
-        <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-          ☰
-        </div>
-        {menuOpen && (
-          <div className="dropdown-menu">
-          <button onClick={() => navigate("/browseCrosswords")}>
-            Browse Crosswords
-          </button>
-          <button onClick={() => navigate("/browseConnections")}>
-            Browse Connections
-          </button>
-        </div>
-        )}
-      </div>
+      
 
-      <h1 className="page-heading">Connect With A Game</h1>
-      <h3 className="page-subtext">Fresh challenges made by fellow players.</h3>
+      
 
       <div style={{ 
         display: 'flex',

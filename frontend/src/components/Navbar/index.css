@@ -1,0 +1,34 @@
+/* Navbar.css */
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    position: relative;
+    background-color: #f9f9f9; 
+    
+  }
+  
+  .navbar-right {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+  }
+  
+  .login-button {
+    background-color: #5e675e;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .username {
+    color: #333;
+    font-weight: bold;
+  }
+
+
+  

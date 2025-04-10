@@ -9,6 +9,7 @@ const Home = () => {
 
 	return (
 		<div className="home-container">
+			
 			<h1 className="title">Puzzle Party</h1>
 			<p className="subtitle">Compete. Create. Climb.</p>
 
