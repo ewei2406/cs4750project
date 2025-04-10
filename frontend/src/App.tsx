@@ -3,6 +3,8 @@ import Connections from "./pages/Connections/connections"
 import CrosswordPage from "./pages/Crosswords/browseCrosswords"
 import CreateConnections from "./pages/Connections/createConnections"
 import BrowseConnections from "./pages/Browse";
+import Login from "./pages/Login/"
+import Signup from "./pages/Login/Signup"
 import Browse from "./pages/Browse"
 import "./App.css"
 import WithNavbar from "./components/Layout/WithNavbar";
@@ -26,6 +28,9 @@ const App = () => {
 				<Route path="/" element={<WithNavbar />}>
 					<Route path="home" element={<Home />} />
 					<Route path="browse" element={<Browse />} />
+					<Route path="login" element={<Login />} />
+					<Route path="signup" element={<Signup />} />
+					<Route path="/createConnections" element={<CreateConnections />} />
 				</Route>
 
 				{/* <Route path="/test">
@@ -36,7 +41,7 @@ const App = () => {
 				{/* <Route path="/connections" element={<Connections />} /> */}
 				{/* <Route path="/browseConnections" element={<BrowseConnections />} /> */}
 				{/* <Route path="/browseCrosswords" element={<CrosswordPage />} /> */}
-				{/* <Route path="/createConnections" element={<CreateConnections />} /> */}
+				
 			</Routes>
 		</BrowserRouter>
 	);
