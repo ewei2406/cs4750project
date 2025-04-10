@@ -2,6 +2,9 @@
 
 An app for creating, sharing, and rating puzzles with friends.
 
+# Link to repo:
+https://github.com/ewei2406/cs4750project/tree/main
+
 ## Backend
 
 ### Development
