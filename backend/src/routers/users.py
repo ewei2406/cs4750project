@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from typing_extensions import Literal
+from pydantic import BaseModel
 
 from src.deps.auth import UserAuth
 from src.deps.db import GetDB
@@ -10,17 +11,21 @@ router = APIRouter(
     tags=["users"],
 )
 
+class Signup(BaseModel):
+    username: str
+    password: str
+
 
 @router.post("/signup")
-async def signup(db: GetDB, username: str, password: str) -> User:
+async def signup(db: GetDB, signup: Signup) -> User:
     async with db.cursor() as cur:
         await cur.execute(
             """
-            insert into users (username, password)
-            values (%s, %s)
+            insert into users (username, password, is_admin)
+            values (%s, %s, false)
             returning user_id
             """,
-            (username, password),
+            (signup.username, signup.password),
         )
         user_id = await cur.fetchone()
         if not user_id:
@@ -30,7 +35,7 @@ async def signup(db: GetDB, username: str, password: str) -> User:
             )
         return User(
             user_id=user_id[0],
-            username=username,
+            username=signup.username,
             is_admin=False,
         )
 
