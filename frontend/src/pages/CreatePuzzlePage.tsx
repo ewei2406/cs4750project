@@ -1,4 +1,3 @@
-import Button from "@/components/Button";
 import Header from "@/components/Header";
 import Paragraph from "@/components/Paragraph";
 import { Link } from "react-router";
@@ -18,13 +17,6 @@ const boxStyle = {
 };
 
 const CreatePuzzlePage = () => {
-	const navigate = useNavigate();
-
-	const handleCreate = (type: string) => async () => {
-		const res = await createPuzzle(type);
-		if (res.variant === "ok") navigate(`/puzzles/${res.value}/edit`);
-	};
-
 	return (
 		<div style={{ padding: "20px" }}>
 			<Header text="Create a Puzzle" />
