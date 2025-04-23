@@ -12,9 +12,12 @@ import Button from "@/components/Button";
 import { FaUserCircle } from "react-icons/fa";
 import { MdLeaderboard, MdAssignment, MdRateReview } from "react-icons/md";
 import { FaPencilAlt } from "react-icons/fa";
+import { useEffect, useMemo } from "react";
+import { useNavigate } from "react-router";
 
 const UserPage = () => {
 	const { userId } = useParams();
+	const navigate = useNavigate();
 	const user = useAuth();
 
 	const { dataResult } = useGet<UserStats>({
@@ -22,6 +25,20 @@ const UserPage = () => {
 		queryKey: ["users", userId ?? ""],
 		disabled: !userId,
 	});
+	const isOwnPage = useMemo(
+		() => user.type === "user" && user.userId.toString() === userId,
+		[userId, user]
+	);
+
+	useEffect(() => {
+		console.log("UserPage dataResult", dataResult);
+		if (isOwnPage && dataResult.variant === "error") {
+			if (confirm("Failed to load your profile. Do you want to log out?")) {
+				authStore.logout();
+				navigate("/");
+			}
+		}
+	}, [dataResult, isOwnPage]);
 
 	if (dataResult.variant === "loading") {
 		return <div>Loading user...</div>;
@@ -32,8 +49,6 @@ const UserPage = () => {
 			<div>Error: {dataResult.error.detail ?? "Unknown error occurred."}</div>
 		);
 	}
-
-	const isOwnPage = user.type === "user" && user.userId === dataResult.value.userId;
 
 	return (
 		<div style={{ padding: 20 }}>

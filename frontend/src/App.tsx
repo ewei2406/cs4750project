@@ -9,7 +9,13 @@ import CreatePuzzlePage from "./pages/CreatePuzzlePage";
 import PuzzlePage from "./pages/PuzzlePage";
 import EditPuzzlePage from "./pages/EditPuzzlePage";
 
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			retry: false,
+		},
+	},
+});
 
 const App = () => {
 	return (
