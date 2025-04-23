@@ -1,4 +1,4 @@
-const Header = ({ text }: { text: string }) => (
+const Paragraph = ({ text }: { text: string }) => (
 	<div
 	  style={{
 		fontFamily: "'Libre Franklin', serif",
@@ -12,4 +12,4 @@ const Header = ({ text }: { text: string }) => (
 	</div>
   );
   
-  export default Header;
+  export default Paragraph;
