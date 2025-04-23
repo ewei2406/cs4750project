@@ -1,0 +1,77 @@
+import { Rating } from "@/util/types";
+import { authStore } from "./useAuth";
+import { fetchWithResult } from "./useGet";
+import { queryClient } from "@/App";
+
+export const deletePuzzle = async (puzzleId: number) => {
+	const result = await fetchWithResult<void>(`puzzles/${puzzleId}`, {
+		method: "DELETE",
+	});
+	queryClient.invalidateQueries({
+		queryKey: ["puzzles"],
+	});
+	if (result.variant === "error") {
+		alert(result.error.detail ?? "Unexpected error occurred.");
+	} else {
+		alert("Puzzle deleted successfully.");
+	}
+};
+
+export const ratePuzzle = async (puzzleId: number) => {
+	const user = authStore.getUser();
+	if (user.type === "guest") {
+		alert("Please log in to rate puzzles.");
+		return;
+	}
+
+	const prevRatingResult = await fetchWithResult<Rating>(
+		`ratings/?puzzle_id=${puzzleId}`
+	);
+
+	const rateNum = prompt(
+		prevRatingResult.variant === "ok"
+			? `My previous rating: ${prevRatingResult.value.rating}\nEnter a new rating (1-5) for the puzzle, or type "remove" to remove my rating:`
+			: "Enter a rating for the puzzle (1-5):"
+	);
+	if (rateNum === null) return;
+
+	const remove = rateNum.toLowerCase() === "remove";
+	if (remove) {
+		await fetchWithResult<Rating>(`ratings/?puzzle_id=${puzzleId}`, {
+			method: "DELETE",
+		});
+		queryClient.invalidateQueries({
+			queryKey: ["puzzles"],
+		});
+		queryClient.invalidateQueries({
+			queryKey: ["ratings"],
+		});
+		alert("Rating removed.");
+		return;
+	}
+
+	const ratingNum = parseInt(rateNum);
+	if (isNaN(ratingNum) || ratingNum < 0 || ratingNum > 5) {
+		alert("Please enter a valid rating between 1 and 5.");
+		return;
+	}
+
+	const result = await fetchWithResult<Rating>(
+		`ratings/?puzzle_id=${puzzleId}&rating=${rateNum}`,
+		{
+			method: "POST",
+		}
+	);
+
+	if (result.variant === "error") {
+		alert(result.error.detail ?? "Unexpected error occurred.");
+		return;
+	}
+	queryClient.invalidateQueries({
+		queryKey: ["puzzles"],
+	});
+	queryClient.invalidateQueries({
+		queryKey: ["ratings"],
+	});
+	alert("Rating submitted successfully.");
+};

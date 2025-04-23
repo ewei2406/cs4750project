@@ -46,6 +46,7 @@ class Attempt(CamelModel):
     username: str
     puzzle_id: int
     puzzle_name: str
+    puzzle_type: str
     attempt: str
     attempt_num: int
     score: int

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from typing_extensions import Literal
 from pydantic import BaseModel
+from typing_extensions import Literal
 
 from src.deps.auth import UserAuth
 from src.deps.db import GetDB
@@ -11,6 +11,7 @@ router = APIRouter(
     tags=["users"],
 )
 
+
 class Signup(BaseModel):
     username: str
     password: str
@@ -19,14 +20,20 @@ class Signup(BaseModel):
 @router.post("/signup")
 async def signup(db: GetDB, signup: Signup) -> User:
     async with db.cursor() as cur:
-        await cur.execute(
-            """
-            insert into users (username, password, is_admin)
-            values (%s, %s, false)
-            returning user_id
-            """,
-            (signup.username, signup.password),
-        )
+        try:
+            await cur.execute(
+                """
+                insert into users (username, password, is_admin)
+                values (%s, %s, false)
+                returning user_id
+                """,
+                (signup.username, signup.password),
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=400,
+                detail="Username already exists, or invalid username/password",
+            ) from e
         user_id = await cur.fetchone()
         if not user_id:
             raise HTTPException(
@@ -128,7 +135,7 @@ async def get_user_attempts(user_id: int, db: GetDB) -> list[Attempt]:
         await cur.execute(
             """
             select 
-                user_id, username, puzzle_id, puzzle_name, attempt, attempt_num,
+                user_id, username, puzzle_id, puzzle_name, puzzle_type, attempt, attempt_num,
                 score, updated_at, solved
             from attempt_stats
             where user_id = %s;
@@ -141,11 +148,12 @@ async def get_user_attempts(user_id: int, db: GetDB) -> list[Attempt]:
                 username=attempt[1],
                 puzzle_id=attempt[2],
                 puzzle_name=attempt[3],
-                attempt=attempt[4],
-                attempt_num=attempt[5],
-                score=attempt[6],
-                updated_at=attempt[7],
-                solved=attempt[8],
+                puzzle_type=attempt[4],
+                attempt=attempt[5],
+                attempt_num=attempt[6],
+                score=attempt[7],
+                updated_at=attempt[8],
+                solved=attempt[9],
                 message={},
             )
             for attempt in await cur.fetchall()

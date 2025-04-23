@@ -564,6 +564,7 @@ async def submit_attempt(
             username=user.username,
             puzzle_id=puzzle_id,
             puzzle_name=puzzle_out[1],
+            puzzle_type=puzzle_type,
             attempt=attempt,
             attempt_num=attempt_num,
             score=score,
@@ -633,6 +634,7 @@ async def submit_attempt_guest(db: GetDB, puzzle_id: int, attempt: str) -> Attem
             username="guest",
             puzzle_id=puzzle_id,
             puzzle_name=puzzle_out[1],
+            puzzle_type=puzzle_type,
             attempt_num=0,
             score=score,
             updated_at=datetime.now(),
@@ -647,7 +649,7 @@ async def get_current_attempt(db: GetDB, user: UserAuth, puzzle_id: int) -> None
         await cur.execute(
             """
             select 
-                user_id, username, puzzle_id, puzzle_name, attempt, attempt_num,
+                user_id, username, puzzle_id, puzzle_name, puzzle_type, attempt, attempt_num,
                 score, updated_at, solved, message
             from attempt_stats
             where user_id = %s and puzzle_id = %s;
@@ -665,12 +667,13 @@ async def get_current_attempt(db: GetDB, user: UserAuth, puzzle_id: int) -> None
             username=attempt[1],
             puzzle_id=attempt[2],
             puzzle_name=attempt[3],
-            attempt=attempt[4],
-            attempt_num=attempt[5],
-            score=attempt[6],
-            updated_at=attempt[7],
-            solved=attempt[8],
-            message=attempt[9],
+            puzzle_type=attempt[4],
+            attempt=attempt[5],
+            attempt_num=attempt[6],
+            score=attempt[7],
+            updated_at=attempt[8],
+            solved=attempt[9],
+            message=json.loads(attempt[10]),
         )
 
 
@@ -680,7 +683,7 @@ async def get_leaderboard(db: GetDB, puzzle_id: int) -> list[Attempt]:
         await cur.execute(
             """
             select 
-                user_id, username, puzzle_id, puzzle_name, attempt_num,
+                user_id, username, puzzle_id, puzzle_name, puzzle_type, attempt_num,
                 score, updated_at, solved, message
             from attempt_stats
             where puzzle_id = %s
@@ -695,10 +698,11 @@ async def get_leaderboard(db: GetDB, puzzle_id: int) -> list[Attempt]:
                 username=attempt[1],
                 puzzle_id=attempt[2],
                 puzzle_name=attempt[3],
-                attempt_num=attempt[4],
-                score=attempt[5],
-                updated_at=attempt[6],
-                solved=attempt[7],
+                puzzle_type=attempt[4],
+                attempt_num=attempt[5],
+                score=attempt[6],
+                updated_at=attempt[7],
+                solved=attempt[8],
                 message={},
                 attempt="",
             )

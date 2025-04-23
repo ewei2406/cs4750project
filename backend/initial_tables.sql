@@ -168,7 +168,7 @@ order by updated_at desc;
 -- Attempts
 create view attempt_stats as
 select A.user_id, A.puzzle_id, A.updated_at, A.attempt_num, A.solved, A.score,
-		U.username, P.puzzle_name, A.message, A.attempt
+		U.username, P.puzzle_name, P.puzzle_type, A.message, A.attempt
 from Attempts A
 join Users as U on A.user_id = U.user_id
 join Puzzles as P on A.puzzle_id = P.puzzle_id

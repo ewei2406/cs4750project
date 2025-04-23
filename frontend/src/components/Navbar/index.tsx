@@ -1,40 +1,30 @@
-import { useNavigate } from "react-router-dom";
-import { useGet } from "@/hooks/useGet"; // adjust path if needed
-import "./index.css";
-
-type User = {
-  userId: number;
-  username: string;
-  isAdmin: boolean;
-};
+import { useAuth } from "@/hooks/useAuth";
+import AuthWidget from "./AuthWidget";
+import { NavLink } from "react-router";
 
 const Navbar = () => {
-  const navigate = useNavigate();
+	const user = useAuth();
 
-  const { result } = useGet<User>({ path: "/puzzle/me" });
-
-  return (
-    <div className="navbar-container">
-      
-
-      <div className="navbar-right">
-        {result.status === "loading" && <span>Loading...</span>}
-
-        {result.status === "error" && (
-          <button
-            className="login-button"
-            onClick={() => navigate("/login")}
-          >
-            Login
-          </button>
-        )}
-
-        {result.status === "success" && (
-          <span className="username">Hi, {result.data.username}</span>
-        )}
-      </div>
-    </div>
-  );
+	return (
+		<div
+			style={{
+				display: "flex",
+				gap: "5px",
+				flexDirection: "row",
+				borderBottom: "1px solid black",
+				padding: "10px",
+			}}
+		>
+			<div style={{ fontWeight: 800 }}>Puzzle Party!</div>
+			<NavLink to="/">Home</NavLink>
+			<NavLink to="/leaderboard">Leaderboard</NavLink>
+			{user.type === "user" && (
+				<NavLink to={`/users/${user.userId}`}>My Page</NavLink>
+			)}
+			<div style={{ marginLeft: "auto" }}></div>
+			<AuthWidget />
+		</div>
+	);
 };
 
 export default Navbar;

@@ -1,19 +1,18 @@
 from typing import Annotated
 
-from fastapi import Depends, HTTPException, Security
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBasic
+from fastapi import Depends, Header, HTTPException
 
 from src.deps.db import GetDB
 from src.model.models import User
 
-security = HTTPBasic()
-
 
 async def auth_user(
-    db: GetDB, credentials: HTTPAuthorizationCredentials = Security(security)
+    db: GetDB,
+    x_username: Annotated[str, Header()],
+    x_password: Annotated[str, Header()],
 ) -> User:
-    username = credentials.username
-    password = credentials.password
+    username = x_username
+    password = x_password
 
     async with db.cursor() as cur:
         await cur.execute(
@@ -38,15 +37,17 @@ UserAuth = Annotated[User, Depends(auth_user)]
 
 
 async def optional_user(
-    db: GetDB, credentials: HTTPAuthorizationCredentials = Security(security)
+    db: GetDB,
+    x_username: Annotated[str | None, Header()] = None,
+    x_password: Annotated[str | None, Header()] = None,
 ) -> User | None:
-    username = credentials.username
-    password = credentials.password
+    if x_username is None or x_password is None:
+        return None
 
     async with db.cursor() as cur:
         await cur.execute(
             "SELECT user_id, username, is_admin FROM users WHERE username = %s AND password = %s",
-            (username, password),
+            (x_username, x_password),
         )
         user = await cur.fetchone()
         if user:
@@ -56,6 +57,10 @@ async def optional_user(
                 is_admin=user[2],
             )
         else:
-            return None
-        
+            raise HTTPException(
+                status_code=401,
+                detail="Not authorized",
+            )
+
+
 UserOptional = Annotated[User | None, Depends(optional_user)]

@@ -1,23 +1,44 @@
-import "./Button.css"
+import "./Button.css";
 
-const Button = ({ text, onClick, disabled, backgroundColor }: { 
-text: string,
-onClick: () => void,
-disabled?: boolean,
-backgroundColor?: string
+const Button = ({
+	text,
+	onClick,
+	disabled,
+	backgroundColor,
+	size,
+}: {
+	text: string;
+	onClick: () => void;
+	disabled?: boolean;
+	backgroundColor?: string;
+	size?: "sm" | "md" | "lg";
 }) => {
-    return <button className="button" onClick={onClick} disabled={disabled} style={{
-        fontSize: "14px",
-        fontWeight: 600,
-        padding: "0.5rem 1rem",
-        borderRadius: "0.375rem",
-        color: "white",
-        backgroundColor: backgroundColor ?? "#555",
-        cursor: "pointer",
-        border: "none" 
-    }}>
-        {text}
-    </button>
-}
+	const buttonSize = {
+		sm: 12,
+		md: 15,
+		lg: 20,
+	};
+	const fontSize = buttonSize[size ?? "md"];
 
-export default Button
+	return (
+		<button
+			className="button"
+			onClick={onClick}
+			disabled={disabled}
+			style={{
+				fontSize,
+				fontWeight: 600,
+				padding: "0.2em 0.4em",
+				borderRadius: fontSize / 2,
+				color: "white",
+				backgroundColor: backgroundColor ?? "#555",
+				cursor: "pointer",
+				border: "none",
+			}}
+		>
+			{text}
+		</button>
+	);
+};
+
+export default Button;
