@@ -10,6 +10,8 @@ https://github.com/ewei2406/cs4750project/tree/main
 ### Development
 1. Enter the backend directory: run `cd backend`.
 2. Set up the environment variables in `.env`.
+    a. DB_URL=postgres://[username]:[password]@[server]/[database_name]
+    b. Execute the contents of `backend/initial_tables.sql` if not already set up.
 3. Install `uv` if not installed: run `curl -LsSf https://astral.sh/uv/install.sh | sh`
 4. Install python packages: run `uv sync`
 5. Start the development server: run `uv run fastapi dev src/main.py`

@@ -187,31 +187,31 @@ select
 from users u
 order by puzzle_ct desc;
 
--- Dummy data
-insert into Users (username, password, is_admin) values
-('user1', 'password1', false),
-('user2', 'password2', false),
-('admin1', 'adminpassword1', true),
-('admin2', 'adminpassword2', true);
+-- -- Dummy data
+-- insert into Users (username, password, is_admin) values
+-- ('user1', 'password1', false),
+-- ('user2', 'password2', false),
+-- ('admin1', 'adminpassword1', true),
+-- ('admin2', 'adminpassword2', true);
 
-insert into Puzzles (created_user_id, puzzle_name, puzzle_type) values
-(1, 'Mini Puzzle 1', 'mini'),
-(2, 'Connections Puzzle 1', 'connections'),
-(1, 'Mini Puzzle 2', 'mini'),
-(2, 'Connections Puzzle 2', 'connections');
+-- insert into Puzzles (created_user_id, puzzle_name, puzzle_type) values
+-- (1, 'Mini Puzzle 1', 'mini'),
+-- (2, 'Connections Puzzle 1', 'connections'),
+-- (1, 'Mini Puzzle 2', 'mini'),
+-- (2, 'Connections Puzzle 2', 'connections');
 
-insert into Ratings (user_id, puzzle_id, rating) values
-(1, 1, 5),
-(2, 1, 4),
-(3, 1, 5),
-(4, 2, 1),
-(1, 2, 1),
-(3, 2, 1);
+-- insert into Ratings (user_id, puzzle_id, rating) values
+-- (1, 1, 5),
+-- (2, 1, 4),
+-- (3, 1, 5),
+-- (4, 2, 1),
+-- (1, 2, 1),
+-- (3, 2, 1);
 
-insert into Attempts (user_id, puzzle_id) values
-(1, 1),
-(2, 1),
-(3, 1),
-(4, 2);
+-- insert into Attempts (user_id, puzzle_id) values
+-- (1, 1),
+-- (2, 1),
+-- (3, 1),
+-- (4, 2);
 
-select * from Attempts;
+-- select * from Attempts;
