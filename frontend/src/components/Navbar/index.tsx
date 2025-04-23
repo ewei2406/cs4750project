@@ -1,6 +1,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import AuthWidget from "./AuthWidget";
 import { useNavigate } from "react-router-dom";
+import Title from "@/components/Title";
 
 const Navbar = () => {
 	const user = useAuth();
@@ -26,7 +27,9 @@ const Navbar = () => {
 				padding: "10px",
 			}}
 		>
-			<div style={{ fontWeight: 800, marginRight: 20 }}>Puzzle Party!</div>
+			<div style={{ fontSize: 35, fontWeight: 500, marginRight: 20, fontFamily: "'Jacquard 24', serif" }}>
+				Puzzle Party
+			</div>
 
 			{/* Push nav links to the right */}
 			<div style={{ marginLeft: "auto", display: "flex", gap: "10px", alignItems: "center" }}>
