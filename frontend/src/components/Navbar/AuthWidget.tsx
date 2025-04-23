@@ -1,5 +1,6 @@
 import { authStore, useAuth } from "@/hooks/useAuth";
 import Button from "../Button";
+import UserLink from "../UserLink";
 
 const AuthWidget = () => {
 	const user = useAuth();
@@ -17,9 +18,9 @@ const AuthWidget = () => {
 	// Signed in
 	return (
 		<div style={{ display: "flex", gap: "5px", flexDirection: "row" }}>
-			<div>{user.username}</div>
+			<UserLink {...user} />
 			{user.isAdmin && <div style={{ color: "red" }}>(Admin)</div>}
-			<Button size="sm" text="Log out" onClick={authStore.logout} />
+			
 		</div>
 	);
 };

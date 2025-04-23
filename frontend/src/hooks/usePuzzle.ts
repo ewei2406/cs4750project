@@ -1,4 +1,4 @@
-import { PuzzleData, Rating } from "@/util/types";
+import { AResult, PuzzleData, Rating } from "@/util/types";
 import { authStore } from "./useAuth";
 import { fetchWithResult } from "./useGet";
 import { queryClient } from "@/App";
@@ -128,4 +128,42 @@ export const updatePuzzle = async (
 	} else {
 		alert("Puzzle updated successfully.");
 	}
+};
+
+export const createPuzzle = async (
+	puzzleType: string
+): AResult<number, void> => {
+	const user = authStore.getUser();
+	if (user.type === "guest") {
+		alert("Log in to create puzzles!");
+		return { variant: "error", error: undefined };
+	}
+
+	const puzzleName = prompt("Enter a name for the new puzzle:");
+	if (puzzleName === null) return { variant: "error", error: undefined };
+
+	const result = await fetchWithResult<number>(`puzzles/`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			puzzleName,
+			puzzleType,
+		}),
+	});
+
+	if (result.variant === "error") {
+		alert(result.error.detail ?? "Unexpected error occurred.");
+		return { variant: "error", error: undefined };
+	} else {
+		alert("Puzzle created successfully.");
+	}
+
+	queryClient.invalidateQueries();
+
+	return {
+		variant: "ok",
+		value: result.value,
+	};
 };
