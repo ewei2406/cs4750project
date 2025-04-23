@@ -16,6 +16,17 @@ const PuzzleRow = ({ puzzle }: { puzzle: Puzzle }) => {
 				flexDirection: "column",
 				borderRadius: 10,
 				border: "1px solid lightgray",
+				backgroundColor: "white",
+				transition: "transform 0.2s ease, box-shadow 0.2s ease",
+				cursor: "pointer",
+			}}
+			onMouseEnter={(e) => {
+				e.currentTarget.style.transform = "scale(1.05)";
+				e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.1)";
+			}}
+			onMouseLeave={(e) => {
+				e.currentTarget.style.transform = "scale(1)";
+				e.currentTarget.style.boxShadow = "none";
 			}}
 		>
 			<div
@@ -55,6 +66,7 @@ const PuzzleRow = ({ puzzle }: { puzzle: Puzzle }) => {
 		</div>
 	);
 };
+
 
 const PuzzleTable = ({
 	endpoint,

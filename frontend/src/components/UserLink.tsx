@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { FaUser } from "react-icons/fa";
 import { useAuth } from "@/hooks/useAuth";
+import { useState } from "react";
 
 const UserLink = ({
 	username,
@@ -11,20 +12,32 @@ const UserLink = ({
 }) => {
 	const user = useAuth();
 	const isSelf = user.type === "user" && user.userId === userId;
+	const [isHovered, setIsHovered] = useState(false);
 
 	return (
 		<div
 			style={{
 				display: "flex",
-				gap: 5,
-				fontSize: 13,
 				alignItems: "center",
+				gap: 8,
+				fontSize: 16,
+				padding: "4px 8px",
+				borderRadius: "4px",
+				cursor: "pointer",
+				backgroundColor: isHovered ? "#f0f0f0" : "transparent",
+				transition: "background-color 0.2s ease",
 			}}
+			onMouseEnter={() => setIsHovered(true)}
+			onMouseLeave={() => setIsHovered(false)}
 		>
-			<FaUser size={10} />
+			<FaUser size={14} />
 			<Link
-				style={{ color: "inherit", textDecoration: "none" }}
 				to={`/users/${userId}`}
+				style={{
+					color: "inherit",
+					textDecoration: "none",
+					fontWeight: 500,
+				}}
 			>
 				{username} {isSelf && "(Me)"}
 			</Link>
