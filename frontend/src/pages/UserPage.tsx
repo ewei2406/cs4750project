@@ -139,7 +139,7 @@ const UserPage = () => {
 			{/* Logout Button */}
 			{isOwnPage && (
 				<div style={{ marginTop: 30 }}>
-					<Button text="Log out" onClick={authStore.logout} />
+					<Button text="LOG OUT" onClick={authStore.logout} />
 				</div>
 			)}
 		</div>

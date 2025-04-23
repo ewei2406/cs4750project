@@ -16,7 +16,7 @@ const Button = ({
 		md: 15,
 		lg: 20,
 	};
-	const fontSize = buttonSize[size ?? "md"];
+	const fontSize = 11; 
 
 	return (
 		<button
@@ -25,15 +25,16 @@ const Button = ({
 			disabled={disabled}
 			style={{
 				opacity: disabled ? 0.2 : undefined,
-				fontSize,
+				fontSize, 
 				fontWeight: 600,
-				padding: "0.2em 0.4em",
-				borderRadius: fontSize / 2,
+				padding: "0.8em 1.0em",
+				borderRadius: "4px",
 				whiteSpace: "nowrap",
 				color: "white",
-				backgroundColor: backgroundColor ?? "#555",
+				backgroundColor: backgroundColor ?? "#5e7a92",
 				cursor: disabled ? "not-allowed" : "pointer",
 				border: "none",
+				fontFamily: "'Libre Franklin', serif", // Add font family here
 			}}
 		>
 			{text}

@@ -8,9 +8,9 @@ const AuthWidget = () => {
 	if (user.type === "guest") {
 		return (
 			<div style={{ display: "flex", gap: "5px", flexDirection: "row" }}>
-				<div>Playing as Guest</div>
-				<Button text="Log in" onClick={authStore.login} size="sm" />
-				<Button text="Sign up" onClick={authStore.signup} size="sm" />
+				{/* <div>Playing as Guest</div> */}
+				<Button text="LOG IN" onClick={authStore.login} size="sm" />
+				<Button text="SIGN UP" onClick={authStore.signup} size="sm" />
 			</div>
 		);
 	}
