@@ -1,4 +1,4 @@
-export interface Puzzle {
+export type Puzzle = {
 	puzzleId: number;
 	puzzleName: string;
 	puzzleType: "mini" | "connections";
@@ -8,7 +8,39 @@ export interface Puzzle {
 	ratingAvg: number | null;
 	updatedAt: string;
 	solvedCt: number;
-}
+};
+
+export type PuzzleData =
+	| {
+			type: "mini";
+			data: {
+				solution: string;
+				across1: string;
+				across2: string;
+				across3: string;
+				across4: string;
+				across5: string;
+				down1: string;
+				down2: string;
+				down3: string;
+				down4: string;
+				down5: string;
+			};
+	  }
+	| {
+			type: "connections";
+			data: {
+				solution: string;
+				category1: string;
+				category2: string;
+				category3: string;
+				category4: string;
+			};
+	  };
+
+export type PuzzleWithData = Puzzle & {
+	puzzleData: PuzzleData;
+};
 
 export type Rating = {
 	userId: number;
@@ -28,9 +60,8 @@ export type Attempt = {
 	puzzleType: Puzzle["puzzleType"];
 	attempt: string;
 	attemptNum: number;
-	score: number;
+	duration: number;
 	updatedAt: string;
-	solved: boolean;
 	message: string;
 };
 

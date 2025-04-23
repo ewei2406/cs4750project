@@ -4,11 +4,16 @@ import { fetchWithResult } from "./useGet";
 import { queryClient } from "@/App";
 
 export const deletePuzzle = async (puzzleId: number) => {
+	if (!confirm("Are you sure you want to delete this puzzle?")) {
+		return;
+	}
+
 	const result = await fetchWithResult<void>(`puzzles/${puzzleId}`, {
 		method: "DELETE",
 	});
 	queryClient.invalidateQueries({
 		queryKey: ["puzzles"],
+		exact: false,
 	});
 	if (result.variant === "error") {
 		alert(result.error.detail ?? "Unexpected error occurred.");
@@ -40,12 +45,7 @@ export const ratePuzzle = async (puzzleId: number) => {
 		await fetchWithResult<Rating>(`ratings/?puzzle_id=${puzzleId}`, {
 			method: "DELETE",
 		});
-		queryClient.invalidateQueries({
-			queryKey: ["puzzles"],
-		});
-		queryClient.invalidateQueries({
-			queryKey: ["ratings"],
-		});
+		queryClient.invalidateQueries();
 		alert("Rating removed.");
 		return;
 	}
@@ -67,11 +67,31 @@ export const ratePuzzle = async (puzzleId: number) => {
 		alert(result.error.detail ?? "Unexpected error occurred.");
 		return;
 	}
-	queryClient.invalidateQueries({
-		queryKey: ["puzzles"],
-	});
-	queryClient.invalidateQueries({
-		queryKey: ["ratings"],
-	});
+	queryClient.invalidateQueries();
+
 	alert("Rating submitted successfully.");
+};
+
+export const solvePuzzle = async (puzzleId: number, duration: number) => {
+	const user = authStore.getUser();
+	if (user.type === "guest") {
+		alert("Log in to save your results to the leaderboard!");
+		return;
+	}
+
+	const result = await fetchWithResult<void>(`puzzles/${puzzleId}/attempt`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			duration,
+		}),
+	});
+
+	queryClient.invalidateQueries();
+
+	if (result.variant === "error") {
+		alert(result.error.detail ?? "Unexpected error occurred.");
+	}
 };

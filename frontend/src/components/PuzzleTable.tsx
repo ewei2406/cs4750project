@@ -1,15 +1,10 @@
-import Button from "@/components/Button";
-import PuzzleIcon from "@/components/PuzzleIcon";
 import StarRating from "@/components/StarRating";
 import UserLink from "@/components/UserLink";
-import { useAuth } from "@/hooks/useAuth";
 import { useGet } from "@/hooks/useGet";
-import { deletePuzzle, ratePuzzle } from "@/hooks/usePuzzle";
 import { Puzzle } from "@/util/types";
-import Header from "./Header";
+import PuzzleLink from "./PuzzleLink";
 
 const PuzzleRow = ({ puzzle }: { puzzle: Puzzle }) => {
-	const user = useAuth();
 	return (
 		<div
 			style={{
@@ -30,9 +25,7 @@ const PuzzleRow = ({ puzzle }: { puzzle: Puzzle }) => {
 					width: "100%",
 				}}
 			>
-				<div onClick={() => ratePuzzle(puzzle.puzzleId)}>
-					<StarRating rating={puzzle.ratingAvg} ratingCt={puzzle.ratingCt} />
-				</div>
+				<StarRating {...puzzle} />
 				<div
 					style={{
 						fontSize: 12,
@@ -44,23 +37,12 @@ const PuzzleRow = ({ puzzle }: { puzzle: Puzzle }) => {
 				</div>
 			</div>
 
-			<PuzzleIcon puzzleType={puzzle.puzzleType} />
-			<div style={{ fontWeight: 800 }}>{puzzle.puzzleName}</div>
+			<PuzzleLink {...puzzle} />
+
 			<UserLink
 				userId={puzzle.createdUserId}
 				username={puzzle.createdUsername}
 			/>
-
-			<div style={{ display: "flex", gap: 5 }}>
-				<Button text="Play" backgroundColor="lightgreen" onClick={() => {}} />
-				{user.type === "user" && user.isAdmin && (
-					<Button
-						text="Delete"
-						backgroundColor="darkred"
-						onClick={() => deletePuzzle(puzzle.puzzleId)}
-					/>
-				)}
-			</div>
 
 			<div
 				style={{
@@ -74,10 +56,16 @@ const PuzzleRow = ({ puzzle }: { puzzle: Puzzle }) => {
 	);
 };
 
-const PuzzleTable = ({ endpoint }: { endpoint: string }) => {
+const PuzzleTable = ({
+	endpoint,
+	queryKey,
+}: {
+	endpoint: string;
+	queryKey: string[];
+}) => {
 	const { dataResult } = useGet<Puzzle[]>({
 		path: endpoint,
-		queryKey: ["puzzles", endpoint],
+		queryKey,
 	});
 
 	if (dataResult.variant === "loading") {

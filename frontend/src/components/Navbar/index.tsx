@@ -15,11 +15,14 @@ const Navbar = () => {
 				padding: "10px",
 			}}
 		>
-			<div style={{ fontWeight: 800 }}>Puzzle Party!</div>
+			<div style={{ fontWeight: 800, marginRight: 20 }}>Puzzle Party!</div>
 			<NavLink to="/">Home</NavLink>
 			<NavLink to="/leaderboard">Leaderboard</NavLink>
 			{user.type === "user" && (
 				<NavLink to={`/users/${user.userId}`}>My Page</NavLink>
+			)}
+			{user.type === "user" && (
+				<NavLink to={`/create-puzzle`}>Create Puzzle</NavLink>
 			)}
 			<div style={{ marginLeft: "auto" }}></div>
 			<AuthWidget />

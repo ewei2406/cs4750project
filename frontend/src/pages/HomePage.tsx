@@ -5,13 +5,19 @@ const HomePage = () => {
 	return (
 		<div>
 			<Header text="Recent Puzzles" />
-			<PuzzleTable endpoint="puzzles/recent" />
+			<PuzzleTable endpoint="puzzles/recent" queryKey={["puzzles", "recent"]} />
 
 			<Header text="Highest Rated Puzzles" />
-			<PuzzleTable endpoint="puzzles/popular" />
+			<PuzzleTable
+				endpoint="puzzles/popular"
+				queryKey={["puzzles", "popular"]}
+			/>
 
 			<Header text="Most Played Puzzles" />
-			<PuzzleTable endpoint="puzzles/most-played" />
+			<PuzzleTable
+				endpoint="puzzles/most-played"
+				queryKey={["puzzles", "most-played"]}
+			/>
 		</div>
 	);
 };

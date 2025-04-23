@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Any
 
 from pydantic import BaseModel, ConfigDict
 from pydantic.alias_generators import to_camel
@@ -47,12 +46,13 @@ class Attempt(CamelModel):
     puzzle_id: int
     puzzle_name: str
     puzzle_type: str
-    attempt: str
     attempt_num: int
-    score: int
+    duration: int
     updated_at: datetime
-    solved: bool
-    message: Any
+
+
+class AttemptData(CamelModel):
+    duration: int
 
 
 class UserStats(CamelModel):

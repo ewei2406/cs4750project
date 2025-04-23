@@ -1,13 +1,18 @@
+import { ratePuzzle } from "@/hooks/usePuzzle";
+
 const StarRating = ({
+	puzzleId,
 	ratingCt,
-	rating,
+	ratingAvg,
 }: {
+	puzzleId: number;
 	ratingCt?: number;
-	rating: number | null;
+	ratingAvg: number | null;
 }) => {
-	if (rating !== null)
+	if (ratingAvg !== null)
 		return (
 			<div
+				onClick={() => ratePuzzle(puzzleId)}
 				style={{
 					display: "flex",
 					cursor: "pointer",
@@ -25,7 +30,7 @@ const StarRating = ({
 							position: "absolute",
 							top: 0,
 							left: 0,
-							width: `${Math.round(((rating ?? 0) / 5) * 100)}%`,
+							width: `${Math.round(((ratingAvg ?? 0) / 5) * 100)}%`,
 							overflow: "hidden",
 						}}
 					>
@@ -38,6 +43,7 @@ const StarRating = ({
 
 	return (
 		<div
+			onClick={() => ratePuzzle(puzzleId)}
 			style={{
 				color: "gray",
 				cursor: "pointer",

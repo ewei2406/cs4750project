@@ -9,8 +9,6 @@ drop trigger if exists insert_puzzle_trigger on puzzles;
 drop function if exists insert_puzzle;
 drop trigger if exists update_puzzle_trigger on puzzles;
 drop function if exists update_puzzle;
-drop trigger if exists compute_score_trigger on attempts;
-drop function if exists compute_score;
 drop view if exists most_played_puzzles;
 drop view if exists most_popular_puzzles;
 drop view if exists most_recent_puzzles;
@@ -51,15 +49,11 @@ create table if not exists Attempts(
 	puzzle_id int references Puzzles(puzzle_id) on delete cascade, 
 	
 	updated_at timestamp not null default now(),
-	attempt text not null default '',
 	attempt_num int not null default 0,
-	solved boolean not null default false,
-	score int not null default 0, 
-
-	message json default '{}'::json,
+	duration int not null default 0,
 
 	primary key(user_id, puzzle_id),
-	constraint score_constraint check (score >= 0 and score <= 100)
+	constraint duration_constraint check (duration >= 0)
 );
 
 -- mini subclass
@@ -158,7 +152,7 @@ execute function update_attempt();
 create view puzzle_stats as
 select P.puzzle_id, P.puzzle_name, P.updated_at, P.puzzle_type,
 		created_user_id, U.username,
-		(select count(*) from Attempts A where A.puzzle_id = P.puzzle_id and A.solved = true) as solved_ct,
+		(select count(*) from Attempts A where A.puzzle_id = P.puzzle_id) as solved_ct,
 		(select count(*) from Ratings R where R.puzzle_id = P.puzzle_id) as rating_ct,
 		(select avg(rating) from Ratings R where R.puzzle_id = P.puzzle_id) as rating_avg
 from Puzzles P
@@ -167,8 +161,8 @@ order by updated_at desc;
 
 -- Attempts
 create view attempt_stats as
-select A.user_id, A.puzzle_id, A.updated_at, A.attempt_num, A.solved, A.score,
-		U.username, P.puzzle_name, P.puzzle_type, A.message, A.attempt
+select A.user_id, A.puzzle_id, A.updated_at, A.attempt_num, A.duration,
+		U.username, P.puzzle_name, P.puzzle_type
 from Attempts A
 join Users as U on A.user_id = U.user_id
 join Puzzles as P on A.puzzle_id = P.puzzle_id
@@ -188,7 +182,7 @@ create view user_stats as
 select
 		u.user_id, u.username, u.is_admin,
 		(select count(*) as puzzle_ct from puzzles p where p.created_user_id = u.user_id),
-		(select count(*) as solved_ct from attempts a where a.user_id = u.user_id and a.solved = true),
+		(select count(*) as solved_ct from attempts a where a.user_id = u.user_id),
 		(select count(*) as rating_ct from ratings r where r.user_id = u.user_id)
 from users u
 order by puzzle_ct desc;

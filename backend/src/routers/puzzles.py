@@ -1,12 +1,10 @@
-import json
-from datetime import datetime
 from typing import Literal
 
 from fastapi import APIRouter, HTTPException
 
 from src.deps.auth import UserAuth
 from src.deps.db import GetDB
-from src.model.models import Attempt, PuzzleStats
+from src.model.models import Attempt, AttemptData, PuzzleStats
 from src.model.puzzles import (
     Connection,
     ConnectionDiscrim,
@@ -15,7 +13,6 @@ from src.model.puzzles import (
     Puzzle,
     PuzzleUpdate,
 )
-from src.util import match_connections, match_mini
 
 router = APIRouter(
     prefix="/puzzles",
@@ -455,98 +452,24 @@ async def get_puzzle(db: GetDB, puzzle_id: int) -> Puzzle:
 
 @router.post("/{puzzle_id}/attempt")
 async def submit_attempt(
-    db: GetDB, user: UserAuth, puzzle_id: int, attempt: str
-) -> Attempt:
+    db: GetDB, user: UserAuth, puzzle_id: int, attempt_data: AttemptData
+) -> int:
     async with db.cursor() as cur:
         # The user should not have already completed the puzzle
-        await cur.execute(
-            """
-            select solved
-            from Attempts
-            where user_id = %s and puzzle_id = %s;
-            """,
-            (user.user_id, puzzle_id),
-        )
-        attempt_out = await cur.fetchone()
-        if attempt_out and attempt_out[0]:
-            raise HTTPException(
-                status_code=400,
-                detail="Puzzle already solved",
-            )
-
-        await cur.execute(
-            """
-            select 
-                P.puzzle_type, P.puzzle_name,
-                M.solution as MiniSolution,
-                C.solution as ConnectionSolution,
-                C.category1, C.category2, C.category3, C.category4
-            from Puzzles P
-            left join Minis M on P.puzzle_type = 'mini' and P.puzzle_id = M.puzzle_id
-            left join Connections C on P.puzzle_type = 'connections' and P.puzzle_id = C.puzzle_id
-            where P.puzzle_id = %s;
-            """,
-            (puzzle_id,),
-        )
-
-        puzzle_out = await cur.fetchone()
-        if not puzzle_out:
-            raise HTTPException(
-                status_code=404,
-                detail="Puzzle not found",
-            )
-        puzzle_type = puzzle_out[0]
-        score = 0
-        message = {}
-
-        try:
-            if puzzle_type == "mini":
-                solved, score, message = match_mini(
-                    attempt=attempt, solution=puzzle_out[2]
-                )
-            elif puzzle_type == "connections":
-                solved, score, message = match_connections(
-                    attempt=attempt,
-                    solution=puzzle_out[3],
-                    categories=[
-                        puzzle_out[4],
-                        puzzle_out[5],
-                        puzzle_out[6],
-                        puzzle_out[7],
-                    ],
-                )
-            else:
-                raise HTTPException(
-                    status_code=500,
-                    detail="Invalid puzzle type.",
-                )
-        except ValueError as e:
-            raise HTTPException(
-                status_code=400,
-                detail=str(e),
-            )
-
-        message_str = json.dumps(message)
         attempt_out = await cur.execute(
             """
-            insert into Attempts (user_id, puzzle_id, attempt, attempt_num, solved, score, message)
-            values (%s, %s, %s, 0, %s, %s, %s)
+            insert into Attempts (attempt_num, user_id, puzzle_id, duration)
+            values (1, %s, %s, %s)
             on conflict (user_id, puzzle_id)
             do update set
-                attempt = excluded.attempt,
                 attempt_num = Attempts.attempt_num + 1,
-                solved = excluded.solved,
-                score = excluded.score,
-                message = excluded.message
+                duration = excluded.duration
             returning attempt_num;
             """,
             (
                 user.user_id,
                 puzzle_id,
-                attempt,
-                solved,
-                score,
-                message_str,
+                attempt_data.duration,
             ),
         )
 
@@ -559,98 +482,18 @@ async def submit_attempt(
 
         attempt_num = attempt_num[0]
         await db.commit()
-        return Attempt(
-            user_id=user.user_id,
-            username=user.username,
-            puzzle_id=puzzle_id,
-            puzzle_name=puzzle_out[1],
-            puzzle_type=puzzle_type,
-            attempt=attempt,
-            attempt_num=attempt_num,
-            score=score,
-            updated_at=datetime.now(),
-            solved=solved,
-            message=message,
-        )
 
-
-@router.post("/{puzzle_id}/attempt-guest")
-async def submit_attempt_guest(db: GetDB, puzzle_id: int, attempt: str) -> Attempt:
-    async with db.cursor() as cur:
-        await cur.execute(
-            """
-            select 
-                P.puzzle_type, P.puzzle_name,
-                M.solution as MiniSolution,
-                C.solution as ConnectionSolution,
-                C.category1, C.category2, C.category3, C.category4
-            from Puzzles P
-            left join Minis M on P.puzzle_type = 'mini' and P.puzzle_id = M.puzzle_id
-            left join Connections C on P.puzzle_type = 'connections' and P.puzzle_id = C.puzzle_id
-            where P.puzzle_id = %s;
-            """,
-            (puzzle_id,),
-        )
-
-        puzzle_out = await cur.fetchone()
-        if not puzzle_out:
-            raise HTTPException(
-                status_code=404,
-                detail="Puzzle not found",
-            )
-        puzzle_type = puzzle_out[0]
-        score = 0
-        message = {}
-
-        try:
-            if puzzle_type == "mini":
-                solved, score, message = match_mini(
-                    attempt=attempt, solution=puzzle_out[2]
-                )
-            elif puzzle_type == "connections":
-                solved, score, message = match_connections(
-                    attempt=attempt,
-                    solution=puzzle_out[3],
-                    categories=[
-                        puzzle_out[4],
-                        puzzle_out[5],
-                        puzzle_out[6],
-                        puzzle_out[7],
-                    ],
-                )
-            else:
-                raise HTTPException(
-                    status_code=500,
-                    detail="Invalid puzzle type.",
-                )
-        except ValueError as e:
-            raise HTTPException(
-                status_code=400,
-                detail=str(e),
-            )
-
-        return Attempt(
-            user_id=None,
-            username="guest",
-            puzzle_id=puzzle_id,
-            puzzle_name=puzzle_out[1],
-            puzzle_type=puzzle_type,
-            attempt_num=0,
-            score=score,
-            updated_at=datetime.now(),
-            solved=solved,
-            message=message,
-        )
+        return attempt_num
 
 
 @router.get("/{puzzle_id}/attempt")
-async def get_current_attempt(db: GetDB, user: UserAuth, puzzle_id: int) -> None:
+async def get_current_attempt(db: GetDB, user: UserAuth, puzzle_id: int) -> Attempt:
     async with db.cursor() as cur:
         await cur.execute(
             """
             select 
-                user_id, username, puzzle_id, puzzle_name, puzzle_type, attempt, attempt_num,
-                score, updated_at, solved, message
+                user_id, username, puzzle_id, puzzle_name, puzzle_type, attempt_num,
+                duration, updated_at
             from attempt_stats
             where user_id = %s and puzzle_id = %s;
             """,
@@ -668,12 +511,9 @@ async def get_current_attempt(db: GetDB, user: UserAuth, puzzle_id: int) -> None
             puzzle_id=attempt[2],
             puzzle_name=attempt[3],
             puzzle_type=attempt[4],
-            attempt=attempt[5],
-            attempt_num=attempt[6],
-            score=attempt[7],
-            updated_at=attempt[8],
-            solved=attempt[9],
-            message=json.loads(attempt[10]),
+            attempt_num=attempt[5],
+            duration=attempt[6],
+            updated_at=attempt[7],
         )
 
 
@@ -684,10 +524,10 @@ async def get_leaderboard(db: GetDB, puzzle_id: int) -> list[Attempt]:
             """
             select 
                 user_id, username, puzzle_id, puzzle_name, puzzle_type, attempt_num,
-                score, updated_at, solved, message
+                duration, updated_at
             from attempt_stats
             where puzzle_id = %s
-            order by score desc, updated_at desc;
+            order by duration asc, updated_at desc;
             """,
             (puzzle_id,),
         )
@@ -700,11 +540,8 @@ async def get_leaderboard(db: GetDB, puzzle_id: int) -> list[Attempt]:
                 puzzle_name=attempt[3],
                 puzzle_type=attempt[4],
                 attempt_num=attempt[5],
-                score=attempt[6],
+                duration=attempt[6],
                 updated_at=attempt[7],
-                solved=attempt[8],
-                message={},
-                attempt="",
             )
             for attempt in attempts
         ]

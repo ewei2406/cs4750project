@@ -1,8 +1,7 @@
 import { useGet } from "@/hooks/useGet";
 import { UserStats } from "@/util/types";
-import Header from "./Header";
 import UserLink from "./UserLink";
-import { Dispatch, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 
 export const UserStatsRow = ({ userStats }: { userStats: UserStats }) => (
@@ -65,9 +64,7 @@ const UserTable = () => {
 				)}
 				{user.type === "guest" && "My Rank: Log in to see your rank!"}
 			</div>
-			<div
-				style={{ border: "1px solid lightgray", borderRadius: 5, width: 600 }}
-			>
+			<div style={{ border: "1px solid lightgray", borderRadius: 5 }}>
 				<div
 					style={{
 						display: "grid",

@@ -1,9 +1,6 @@
 import { useGet } from "@/hooks/useGet";
-import { Rating, UserStats } from "@/util/types";
-import Header from "./Header";
+import { Rating } from "@/util/types";
 import UserLink from "./UserLink";
-import { Dispatch, useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
 import StarRating from "./StarRating";
 import PuzzleLink from "./PuzzleLink";
 
@@ -23,7 +20,7 @@ const RatingRow = ({ rating }: { rating: Rating }) => (
 			puzzleId={rating.puzzleId}
 		/>
 		<div>
-			<StarRating rating={rating.rating} />
+			<StarRating ratingAvg={rating.rating} {...rating} />
 			<div style={{ fontSize: 11, color: "gray" }}>
 				(Updated {rating.updatedAt.slice(0, 10)})
 			</div>
@@ -31,10 +28,16 @@ const RatingRow = ({ rating }: { rating: Rating }) => (
 	</div>
 );
 
-const RatingsTable = ({ endpoint }: { endpoint: string }) => {
+const RatingsTable = ({
+	endpoint,
+	queryKey,
+}: {
+	endpoint: string;
+	queryKey: string[];
+}) => {
 	const { dataResult } = useGet<Rating[]>({
 		path: endpoint,
-		queryKey: ["ratings", endpoint],
+		queryKey,
 	});
 
 	if (dataResult.variant === "loading") {
@@ -48,7 +51,7 @@ const RatingsTable = ({ endpoint }: { endpoint: string }) => {
 	}
 
 	return (
-		<div style={{ border: "1px solid lightgray", borderRadius: 5, width: 600 }}>
+		<div style={{ border: "1px solid lightgray", borderRadius: 5 }}>
 			<div
 				style={{
 					display: "grid",

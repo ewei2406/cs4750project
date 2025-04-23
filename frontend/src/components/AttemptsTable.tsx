@@ -1,16 +1,13 @@
 import { useGet } from "@/hooks/useGet";
-import { Attempt, UserStats } from "@/util/types";
-import Header from "./Header";
+import { Attempt } from "@/util/types";
 import UserLink from "./UserLink";
-import { Dispatch, useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
 import PuzzleLink from "./PuzzleLink";
 
 const AttemptRow = ({ attempt }: { attempt: Attempt }) => (
 	<div
 		style={{
 			display: "grid",
-			gridTemplateColumns: "1fr 1.5fr 1fr 1fr 1fr 1fr",
+			gridTemplateColumns: "1fr 1.5fr 1fr 1fr 1fr",
 			gap: 5,
 			padding: 5,
 		}}
@@ -28,16 +25,21 @@ const AttemptRow = ({ attempt }: { attempt: Attempt }) => (
 				? "3rd attempt"
 				: `${attempt.attemptNum}th attempt`}
 		</div>
-		<div>{attempt.solved ? "Solved" : "Unsolved"}</div>
-		<div>{attempt.score} points</div>
+		<div>{attempt.duration}s</div>
 		<div>{attempt.updatedAt.slice(0, 10)}</div>
 	</div>
 );
 
-const AttemptsTable = ({ endpoint }: { endpoint: string }) => {
+const AttemptsTable = ({
+	endpoint,
+	queryKey,
+}: {
+	endpoint: string;
+	queryKey: string[];
+}) => {
 	const { dataResult } = useGet<Attempt[]>({
 		path: endpoint,
-		queryKey: ["attempts", endpoint],
+		queryKey,
 	});
 
 	if (dataResult.variant === "loading") {
@@ -51,11 +53,11 @@ const AttemptsTable = ({ endpoint }: { endpoint: string }) => {
 	}
 
 	return (
-		<div style={{ border: "1px solid lightgray", borderRadius: 5, width: 700 }}>
+		<div style={{ border: "1px solid lightgray", borderRadius: 5 }}>
 			<div
 				style={{
 					display: "grid",
-					gridTemplateColumns: "1fr 1.5fr 1fr 1fr 1fr 1fr",
+					gridTemplateColumns: "1fr 1.5fr 1fr 1fr 1fr",
 					gap: 5,
 					fontWeight: 800,
 					padding: 5,
@@ -65,8 +67,7 @@ const AttemptsTable = ({ endpoint }: { endpoint: string }) => {
 				<div>User</div>
 				<div>Puzzle</div>
 				<div>Attempt #</div>
-				<div>Solved?</div>
-				<div>Score</div>
+				<div>Duration</div>
 				<div>Updated</div>
 			</div>
 			<div

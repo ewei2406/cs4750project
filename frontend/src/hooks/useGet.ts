@@ -84,7 +84,7 @@ export const useGet = <T>({
 	disabled,
 }: {
 	path: string;
-	queryKey?: string[];
+	queryKey: string[];
 	staleTime?: number;
 	disabled?: boolean;
 }) => {
@@ -94,7 +94,7 @@ export const useGet = <T>({
 	const { authFetch } = useAuthFetch();
 	const { data, status, error, refetch } = useQuery<T, RequestErr>({
 		enabled: !disabled,
-		queryKey: queryKey ?? [path],
+		queryKey,
 		queryFn: async () => {
 			const result = await authFetch(path);
 			if (result.variant === "ok") {

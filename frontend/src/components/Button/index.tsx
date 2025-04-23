@@ -26,13 +26,14 @@ const Button = ({
 			onClick={onClick}
 			disabled={disabled}
 			style={{
+				opacity: disabled ? 0.2 : undefined,
 				fontSize,
 				fontWeight: 600,
 				padding: "0.2em 0.4em",
 				borderRadius: fontSize / 2,
 				color: "white",
 				backgroundColor: backgroundColor ?? "#555",
-				cursor: "pointer",
+				cursor: disabled ? "not-allowed" : "pointer",
 				border: "none",
 			}}
 		>
