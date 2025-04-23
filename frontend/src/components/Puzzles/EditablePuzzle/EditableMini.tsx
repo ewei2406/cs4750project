@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import Timer from "@/components/Timer";
 import { useMini } from "@/hooks/puzzles/useMini";
+import { updatePuzzle } from "@/hooks/usePuzzle";
 import { PuzzleData } from "@/util/types";
 import { useState } from "react";
 
@@ -31,11 +32,32 @@ const EditableMini = ({
 						solution: prev.data.solution
 							.split("")
 							.map((l, i) => (i === idx ? letter : l))
-							.join(""),
+							.join("")
+							.toLowerCase(),
 					},
 				}));
 			}
 		};
+
+	const getHint = (direction: string, num: number) => (
+		<div>
+			{num}:{" "}
+			<input
+				type="text"
+				//@ts-ignore
+				value={newPuzzleData.data[`${direction}${num}`]}
+				onChange={(e) => {
+					setNewPuzzleData((prev) => ({
+						...prev,
+						data: {
+							...prev.data,
+							[`${direction}${num}`]: e.target.value,
+						},
+					}));
+				}}
+			/>
+		</div>
+	);
 
 	return (
 		<div>
@@ -51,11 +73,12 @@ const EditableMini = ({
 			<br />
 			<br />
 
-			<div>
+			<div style={{ display: "flex", gap: 20 }}>
 				<div>
-					<div style={{ fontWeight: 800 }}>
-						Solution (Use underscores for black boxes):
-					</div>
+					<div style={{ fontWeight: 800 }}>Solution:</div>
+					(Use underscores for black squares)
+					<br />
+					<br />
 					<div
 						style={{
 							position: "relative",
@@ -67,6 +90,7 @@ const EditableMini = ({
 					>
 						{Array.from({ length: 25 }).map((_, i) => (
 							<input
+								key={i}
 								style={{
 									width: 50,
 									height: 50,
@@ -123,7 +147,30 @@ const EditableMini = ({
 
 				<div>
 					<div style={{ fontWeight: 800 }}>Hints:</div>
+
+					<br />
+					<div style={{ fontWeight: 800 }}>Across</div>
+					{getHint("across", 1)}
+					{getHint("across", 2)}
+					{getHint("across", 3)}
+					{getHint("across", 4)}
+					{getHint("across", 5)}
+
+					<br />
+					<div style={{ fontWeight: 800 }}>Down</div>
+					{getHint("down", 1)}
+					{getHint("down", 2)}
+					{getHint("down", 3)}
+					{getHint("down", 4)}
+					{getHint("down", 5)}
 				</div>
+			</div>
+
+			<div style={{ margin: "20px 0" }}>
+				<Button
+					text="Save"
+					onClick={() => updatePuzzle(puzzleId, newPuzzleName, newPuzzleData)}
+				/>
 			</div>
 		</div>
 	);

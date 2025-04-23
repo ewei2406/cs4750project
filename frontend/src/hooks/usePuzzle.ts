@@ -1,4 +1,4 @@
-import { Rating } from "@/util/types";
+import { PuzzleData, Rating } from "@/util/types";
 import { authStore } from "./useAuth";
 import { fetchWithResult } from "./useGet";
 import { queryClient } from "@/App";
@@ -93,5 +93,39 @@ export const solvePuzzle = async (puzzleId: number, duration: number) => {
 
 	if (result.variant === "error") {
 		alert(result.error.detail ?? "Unexpected error occurred.");
+	}
+};
+
+export const updatePuzzle = async (
+	puzzleId: number,
+	puzzleName: string,
+	puzzleData: PuzzleData
+) => {
+	const user = authStore.getUser();
+	if (user.type === "guest") {
+		alert("Log in to update puzzles!");
+		return;
+	}
+
+	const result = await fetchWithResult<void>(`puzzles/${puzzleId}`, {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			puzzleName,
+			puzzleData,
+		}),
+	});
+
+	queryClient.invalidateQueries({
+		queryKey: ["puzzles"],
+		exact: false,
+	});
+
+	if (result.variant === "error") {
+		alert(result.error.detail ?? "Unexpected error occurred.");
+	} else {
+		alert("Puzzle updated successfully.");
 	}
 };
