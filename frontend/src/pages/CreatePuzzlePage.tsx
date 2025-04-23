@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import Header from "@/components/Header";
 import { createPuzzle } from "@/hooks/usePuzzle";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 const CreatePuzzlePage = () => {
 	const navigate = useNavigate();

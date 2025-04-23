@@ -1,12 +1,5 @@
 import Button from "@/components/Button";
-import Timer from "@/components/Timer";
-import {
-	ConnectionsWord,
-	ConnectionsWordGroup,
-	useConnections,
-} from "@/hooks/puzzles/useConnections";
 import { deletePuzzle, updatePuzzle } from "@/hooks/usePuzzle";
-import { COLOR_MAP } from "@/util/constants";
 import { PuzzleData } from "@/util/types";
 import { useState } from "react";
 
