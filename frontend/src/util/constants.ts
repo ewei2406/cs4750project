@@ -3,7 +3,7 @@ import { Puzzle } from "./types";
 const PROTOCOL = window.location.protocol;
 
 export const API_ENDPOINT_BASE =
-	window.location.hostname === "localhost"
+	window.location.hostname === "localhost" && window.location.port === "5173"
 		? PROTOCOL + "//localhost:8000/"
 		: "/";
 

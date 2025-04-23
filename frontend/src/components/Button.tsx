@@ -3,19 +3,12 @@ const Button = ({
 	onClick,
 	disabled,
 	backgroundColor,
-	size,
 }: {
 	text: string;
 	onClick: () => void;
 	disabled?: boolean;
 	backgroundColor?: string;
-	size?: "sm" | "md" | "lg";
 }) => {
-	const buttonSize = {
-		sm: 12,
-		md: 15,
-		lg: 20,
-	};
 	const fontSize = 11; 
 
 	return (

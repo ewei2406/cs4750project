@@ -9,8 +9,8 @@ const AuthWidget = () => {
 		return (
 			<div style={{ display: "flex", gap: "5px", flexDirection: "row" }}>
 				{/* <div>Playing as Guest</div> */}
-				<Button text="LOG IN" onClick={authStore.login} size="sm" />
-				<Button text="SIGN UP" onClick={authStore.signup} size="sm" />
+				<Button text="LOG IN" onClick={authStore.login} />
+				<Button text="SIGN UP" onClick={authStore.signup} />
 			</div>
 		);
 	}
@@ -20,7 +20,6 @@ const AuthWidget = () => {
 		<div style={{ display: "flex", gap: "5px", flexDirection: "row" }}>
 			<UserLink {...user} />
 			{user.isAdmin && <div style={{ color: "red" }}>(Admin)</div>}
-			
 		</div>
 	);
 };
