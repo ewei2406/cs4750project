@@ -46,13 +46,7 @@ const CreatePuzzlePage = () => {
 					<div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "10px", color: "#007bff", fontFamily: "'Libre Franklin', serif" }}>
 						Mini
 					</div>
-					<Paragraph text="The 'mini' is a small, 5x5 square word puzzle where you fill in words
-// 						based on given clues. Each clue corresponds to a row ('across') or
-// 						column ('down'), and the answer fits into the grid. The goal is to fill
-// 						in all the correct words, using logic, vocabulary, and wordplay. Because
-// 						it's small, it usually takes just a few minutes to finish, making it a
-// 						quick and fun mental exercise. Some people even try to solve it as fast
-// 						as possible for an extra challenge." />
+					<Paragraph text="The mini is a quick 5x5 crossword where each clue fits into a row or column. It's a fun, fast-paced word puzzle that tests your logic and vocabulary." />
 				</div>
 
 				{/* Connections Puzzle Box */}
@@ -61,13 +55,7 @@ const CreatePuzzlePage = () => {
 					<div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "10px", color: "#28a745", fontFamily: "'Libre Franklin', serif" }}>
 						Connections
 					</div>
-					<Paragraph text="The 'connections' puzzle is a fun and challenging word game where you
-// 						are given a grid of words, and your task is to find the connections
-// 						between them. The goal is to identify groups of words that share a
-// 						common theme or category. For example, you might have a grid with words
-// 						like 'apple,' 'banana,' 'carrot,' and 'broccoli,' and the connection
-// 						would be 'food.' It's a great way to test your vocabulary and lateral
-// 						thinking skills!" />
+					<Paragraph text="Connections is a word game where you group related words by theme—like finding 'apple,' 'banana,' and 'carrot' all belong to 'food.' It’s quick, clever, and great for testing word associations." />
 				</div>
 			</div>
 		</div>
