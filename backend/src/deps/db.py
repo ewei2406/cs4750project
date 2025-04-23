@@ -16,7 +16,9 @@ connection_pool: None | AsyncConnectionPool = None
 async def init_db():
     global connection_pool
     if connection_pool is None:
-        connection_pool = AsyncConnectionPool(DB_URL, open=False, max_size=1)
+        connection_pool = AsyncConnectionPool(
+            DB_URL, open=False, min_size=1, max_size=1
+        )
         await connection_pool.open()
 
     # Test the connection
