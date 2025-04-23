@@ -1,5 +1,5 @@
 import { PuzzleData } from "@/util/types";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { solvePuzzle } from "../usePuzzle";
 
 export type ConnectionsWord = {

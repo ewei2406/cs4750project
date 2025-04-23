@@ -1,8 +1,8 @@
-import AttemptsTable from "@/components/AttemptsTable";
+import AttemptsTable from "@/components/Tables/AttemptsTable";
 import Header from "@/components/Header";
-import PuzzleTable from "@/components/PuzzleTable";
-import RatingsTable from "@/components/RatingsTable";
-import { UserStatsRow } from "@/components/UserTable";
+import PuzzleTable from "@/components/Tables/PuzzleTable";
+import RatingsTable from "@/components/Tables/RatingsTable";
+import { UserStatsRow } from "@/components/Tables/UserTable";
 import { useGet } from "@/hooks/useGet";
 import { UserStats } from "@/util/types";
 import { useParams } from "react-router-dom";

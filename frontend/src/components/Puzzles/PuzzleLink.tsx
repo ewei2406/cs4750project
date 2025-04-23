@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import PuzzleIcon from "./PuzzleIcon";
+import PuzzleIcon from "../PuzzleIcon";
 import { Puzzle } from "@/util/types";
 
 const PuzzleLink = ({

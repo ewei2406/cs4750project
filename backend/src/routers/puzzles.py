@@ -486,37 +486,6 @@ async def submit_attempt(
         return attempt_num
 
 
-@router.get("/{puzzle_id}/attempt")
-async def get_current_attempt(db: GetDB, user: UserAuth, puzzle_id: int) -> Attempt:
-    async with db.cursor() as cur:
-        await cur.execute(
-            """
-            select 
-                user_id, username, puzzle_id, puzzle_name, puzzle_type, attempt_num,
-                duration, updated_at
-            from attempt_stats
-            where user_id = %s and puzzle_id = %s;
-            """,
-            (user.user_id, puzzle_id),
-        )
-        attempt = await cur.fetchone()
-        if not attempt:
-            raise HTTPException(
-                status_code=404,
-                detail="Attempt not found",
-            )
-        return Attempt(
-            user_id=attempt[0],
-            username=attempt[1],
-            puzzle_id=attempt[2],
-            puzzle_name=attempt[3],
-            puzzle_type=attempt[4],
-            attempt_num=attempt[5],
-            duration=attempt[6],
-            updated_at=attempt[7],
-        )
-
-
 @router.get("/{puzzle_id}/attempts")
 async def get_leaderboard(db: GetDB, puzzle_id: int) -> list[Attempt]:
     async with db.cursor() as cur:

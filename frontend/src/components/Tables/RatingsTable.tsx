@@ -1,8 +1,8 @@
 import { useGet } from "@/hooks/useGet";
 import { Rating } from "@/util/types";
-import UserLink from "./UserLink";
-import StarRating from "./StarRating";
-import PuzzleLink from "./PuzzleLink";
+import UserLink from "../UserLink";
+import StarRating from "../StarRating";
+import PuzzleLink from "../Puzzles/PuzzleLink";
 
 const RatingRow = ({ rating }: { rating: Rating }) => (
 	<div

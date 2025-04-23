@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import PuzzleTable from "../components/PuzzleTable";
+import PuzzleTable from "../components/Tables/PuzzleTable";
 
 const HomePage = () => {
 	return (

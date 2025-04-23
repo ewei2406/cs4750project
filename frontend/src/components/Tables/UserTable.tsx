@@ -1,6 +1,6 @@
 import { useGet } from "@/hooks/useGet";
 import { UserStats } from "@/util/types";
-import UserLink from "./UserLink";
+import UserLink from "../UserLink";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 

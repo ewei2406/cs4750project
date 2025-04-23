@@ -2,7 +2,7 @@ import StarRating from "@/components/StarRating";
 import UserLink from "@/components/UserLink";
 import { useGet } from "@/hooks/useGet";
 import { Puzzle } from "@/util/types";
-import PuzzleLink from "./PuzzleLink";
+import PuzzleLink from "../Puzzles/PuzzleLink";
 
 const PuzzleRow = ({ puzzle }: { puzzle: Puzzle }) => {
 	return (

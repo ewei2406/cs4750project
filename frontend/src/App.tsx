@@ -5,8 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import HomePage from "./pages/HomePage";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import UserPage from "./pages/UserPage";
-import CreatePuzzlePage from "./pages/create-puzzle/CreatePuzzlePage";
+import CreatePuzzlePage from "./pages/CreatePuzzlePage";
 import PuzzlePage from "./pages/PuzzlePage";
+import EditPuzzlePage from "./pages/EditPuzzlePage";
 
 export const queryClient = new QueryClient();
 
@@ -19,9 +20,8 @@ const App = () => {
 						<Route index element={<HomePage />} />
 						<Route path="leaderboard" element={<LeaderboardPage />} />
 						<Route path="users/:userId" element={<UserPage />} />
-						<Route path="create-puzzle/">
-							<Route index element={<CreatePuzzlePage />} />
-						</Route>
+						<Route path="create-puzzle" element={<CreatePuzzlePage />} />
+						<Route path="puzzles/:puzzleId/edit" element={<EditPuzzlePage />} />
 						<Route path="puzzles/:puzzleId" element={<PuzzlePage />} />
 					</Route>
 				</Routes>

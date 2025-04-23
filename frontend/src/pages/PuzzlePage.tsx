@@ -1,9 +1,8 @@
-import AttemptsTable from "@/components/AttemptsTable";
+import AttemptsTable from "@/components/Tables/AttemptsTable";
 import Button from "@/components/Button";
 import Header from "@/components/Header";
-import PlayablePuzzle from "@/components/Puzzle/PlayablePuzzle";
-import StarRating from "@/components/StarRating";
-import UserLink from "@/components/UserLink";
+import PlayablePuzzle from "@/components/Puzzles/PlayablePuzzle";
+import PuzzleStats from "@/components/Puzzles/PuzzleStats";
 import { useAuth } from "@/hooks/useAuth";
 import { useGet } from "@/hooks/useGet";
 import { deletePuzzle } from "@/hooks/usePuzzle";
@@ -44,28 +43,8 @@ const PuzzlePage = () => {
 				puzzleId={dataResult.value.puzzleId}
 			/>
 
-			<div
-				style={{ display: "grid", gap: 5, gridTemplateColumns: "75px 200px" }}
-			>
-				<div>Author:</div>
-				<UserLink
-					userId={dataResult.value.createdUserId}
-					username={dataResult.value.createdUsername}
-				/>
-				
+			<PuzzleStats puzzle={dataResult.value} />
 
-				<div>Updated:</div>
-				<div>{dataResult.value.updatedAt.slice(0, 10)}</div>
-
-				<div>Rating:</div>
-				<StarRating {...dataResult.value} />
-
-				<div>Solves:</div>
-				<div>{dataResult.value.solvedCt}</div>
-
-				<div>Type:</div>
-				<div>{dataResult.value.puzzleType}</div>
-			</div>
 			{canDelete && (
 				<div style={{ marginTop: 10 }}>
 					<Button

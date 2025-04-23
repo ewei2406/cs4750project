@@ -1,7 +1,7 @@
 import { useGet } from "@/hooks/useGet";
 import { Attempt } from "@/util/types";
-import UserLink from "./UserLink";
-import PuzzleLink from "./PuzzleLink";
+import UserLink from "../UserLink";
+import PuzzleLink from "../Puzzles/PuzzleLink";
 
 const AttemptRow = ({ attempt }: { attempt: Attempt }) => (
 	<div

@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import UserTable from "@/components/UserTable";
+import UserTable from "@/components/Tables/UserTable";
 
 const LeaderboardPage = () => {
 	return (
