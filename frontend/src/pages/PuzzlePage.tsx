@@ -45,23 +45,20 @@ const PuzzlePage = () => {
 
 			<PuzzleStats puzzle={dataResult.value} />
 
-			{canDelete && (
-				<div style={{ marginTop: 10 }}>
+			<div style={{ display: "flex", gap: 10, marginTop: 10 }}>
+				{canDelete && (
 					<Button
 						backgroundColor="darkred"
-						text="Delete Puzzle"
+						text="Delete"
 						onClick={() => deletePuzzle(Number(puzzleId) ?? -1)}
 					/>
-				</div>
-			)}
-
-			{canEdit && (
-				<div style={{ marginTop: 10 }}>
+				)}
+				{canEdit && (
 					<Link to={`/puzzles/${dataResult.value.puzzleId}/edit`}>
-						<Button text="Edit Puzzle" onClick={() => {}} />
+						<Button text="Edit" onClick={() => {}} />
 					</Link>
-				</div>
-			)}
+				)}
+			</div>
 
 			<Header text="Leaderboard" />
 			<AttemptsTable

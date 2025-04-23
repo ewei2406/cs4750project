@@ -1,13 +1,7 @@
 import Button from "@/components/Button";
-import Timer from "@/components/Timer";
-import { useMini } from "@/hooks/puzzles/useMini";
-import { updatePuzzle } from "@/hooks/usePuzzle";
+import { deletePuzzle, updatePuzzle } from "@/hooks/usePuzzle";
 import { PuzzleData } from "@/util/types";
 import { useState } from "react";
-
-const MiniHint = ({ selected, hint }: { selected: boolean; hint: string }) => (
-	<div style={{ textDecoration: selected ? "underline" : "none" }}>{hint}</div>
-);
 
 const EditableMini = ({
 	puzzleName,
@@ -166,10 +160,15 @@ const EditableMini = ({
 				</div>
 			</div>
 
-			<div style={{ margin: "20px 0" }}>
+			<div style={{ margin: "20px 0", display: "flex", gap: 10 }}>
 				<Button
 					text="Save"
 					onClick={() => updatePuzzle(puzzleId, newPuzzleName, newPuzzleData)}
+				/>
+				<Button
+					backgroundColor="darkred"
+					text="Delete"
+					onClick={() => deletePuzzle(puzzleId)}
 				/>
 			</div>
 		</div>

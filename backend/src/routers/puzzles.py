@@ -1,10 +1,8 @@
-from typing import Literal
-
 from fastapi import APIRouter, HTTPException
 
 from src.deps.auth import UserAuth
 from src.deps.db import GetDB
-from src.model.models import Attempt, AttemptData, PuzzleStats
+from src.model.models import Attempt, AttemptData, PuzzleCreate, PuzzleStats
 from src.model.puzzles import (
     Connection,
     ConnectionDiscrim,
@@ -141,12 +139,10 @@ async def get_most_played_puzzles(db: GetDB):
 
 
 @router.post("/")
-async def create_puzzle(
-    db: GetDB,
-    user: UserAuth,
-    puzzle_name: str,
-    puzzle_type: Literal["mini", "connections"],
-) -> int:
+async def create_puzzle(db: GetDB, user: UserAuth, puzzle_create: PuzzleCreate) -> int:
+    puzzle_name = puzzle_create.puzzle_name
+    puzzle_type = puzzle_create.puzzle_type
+
     async with db.cursor() as cur:
         await cur.execute(
             """

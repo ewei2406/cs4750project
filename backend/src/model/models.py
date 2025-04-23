@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict
 from pydantic.alias_generators import to_camel
@@ -28,6 +29,11 @@ class PuzzleStats(CamelModel):
     rating_ct: int
     rating_avg: float | None
     solved_ct: int
+
+
+class PuzzleCreate(CamelModel):
+    puzzle_name: str
+    puzzle_type: Literal["mini", "connections"]
 
 
 class Rating(CamelModel):

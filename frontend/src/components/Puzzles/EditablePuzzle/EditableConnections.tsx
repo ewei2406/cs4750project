@@ -5,123 +5,116 @@ import {
 	ConnectionsWordGroup,
 	useConnections,
 } from "@/hooks/puzzles/useConnections";
+import { deletePuzzle, updatePuzzle } from "@/hooks/usePuzzle";
 import { COLOR_MAP } from "@/util/constants";
 import { PuzzleData } from "@/util/types";
+import { useState } from "react";
 
-const WordGroup = ({ group }: { group: ConnectionsWordGroup }) => (
-	<div
-		key={group.id * 100}
-		style={{
-			gridColumn: "1 / -1",
-			borderRadius: 5,
-			height: 65,
-			display: "flex",
-			flexDirection: "column",
-			justifyContent: "center",
-			alignItems: "center",
-			backgroundColor: COLOR_MAP[group.id],
-		}}
-	>
-		<div style={{ fontWeight: 800 }}>{group.group}</div>
-		<div style={{ fontSize: "0.9em" }}>
-			{group.words.map((w) => w.word).join(", ")}
-		</div>
-	</div>
-);
-
-const WordButton = ({
-	word,
-	selected,
-	onClick,
-}: {
-	word: ConnectionsWord;
-	selected: boolean;
-	onClick: () => void;
-}) => (
-	<div
-		onClick={onClick}
-		style={{
-			backgroundColor: selected ? "#999" : "#eee",
-			display: "flex",
-			justifyContent: "center",
-			cursor: "pointer",
-			userSelect: "none",
-			alignItems: "center",
-			borderRadius: 5,
-			height: 65,
-		}}
-	>
-		{word.word}
-	</div>
-);
-
-const PlayableConnections = ({
+const EditableConnections = ({
+	puzzleName,
 	puzzleData,
 	puzzleId,
 }: {
+	puzzleName: string;
 	puzzleData: PuzzleData & { type: "connections" };
 	puzzleId: number;
 }) => {
-	const {
-		hint,
-		unusedWords,
-		toggleWord,
-		selection,
-		checkSelection,
-		clearSelection,
-		solvedGroups,
-		solved,
-	} = useConnections(puzzleData, puzzleId);
+	const [newPuzzleName, setNewPuzzleName] = useState(puzzleName);
+	const [newPuzzleData, setNewPuzzleData] = useState(puzzleData);
+
+	const getWordGroup = (groupIdx: number) => (
+		<div style={{ display: "flex", gap: 10, flexDirection: "column" }}>
+			<div>
+				<div style={{ fontWeight: 800 }}>Category {groupIdx + 1}</div>
+				<input
+					type="text"
+					// @ts-ignore
+					value={newPuzzleData.data[`category${groupIdx + 1}`]}
+					onChange={(e) => {
+						setNewPuzzleData((prev) => ({
+							...prev,
+							data: {
+								...prev.data,
+								[`category${groupIdx + 1}`]: e.target.value,
+							},
+						}));
+					}}
+					style={{ width: 200 }}
+				/>
+			</div>
+
+			<div style={{ display: "flex", gap: 10, marginLeft: 30 }}>
+				{Array.from({ length: 4 }).map((_, idx) => (
+					<div key={idx}>
+						<div style={{ fontWeight: 800 }}>Word {idx + 1}</div>
+						<input
+							type="text"
+							// @ts-ignore
+							value={
+								newPuzzleData.data.solution.split(";")[groupIdx].split(",")[idx]
+							}
+							onChange={(e) => {
+								setNewPuzzleData((prev) => ({
+									...prev,
+									data: {
+										...prev.data,
+										solution: prev.data.solution
+											.split(";")
+											.map((group, gIdx) =>
+												groupIdx === gIdx
+													? group
+															.split(",")
+															.map((word, wordIdx) =>
+																wordIdx === idx ? e.target.value : word
+															)
+															.join(",")
+													: group
+											)
+											.join(";"),
+									},
+								}));
+							}}
+						/>
+					</div>
+				))}
+			</div>
+		</div>
+	);
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				gap: 5,
-				alignItems: "center",
-			}}
-		>
-			<Timer disabled={solved} />
-			<div
-				style={{
-					display: "grid",
-					gridTemplateColumns: "1fr 1fr 1fr 1fr",
-					gap: 5,
-					width: 600,
+		<div>
+			<div style={{ fontWeight: 800 }}>Puzzle Name:</div>
+			<input
+				type="text"
+				value={newPuzzleName}
+				onChange={(e) => {
+					setNewPuzzleName(e.target.value);
 				}}
-			>
-				{solvedGroups.map((group) => (
-					<WordGroup group={group} key={group.id} />
-				))}
+			/>
 
-				{unusedWords.map((word) => (
-					<WordButton
-						selected={selection.some((s) => s.id === word.id)}
-						word={word}
-						onClick={() => toggleWord(word)}
-						key={word.id}
-					/>
-				))}
+			<br />
+			<br />
+
+			<div style={{ display: "flex", gap: 20, flexDirection: "column" }}>
+				{getWordGroup(0)}
+				{getWordGroup(1)}
+				{getWordGroup(2)}
+				{getWordGroup(3)}
 			</div>
 
-			<div style={{ display: "flex", gap: 5 }}>
+			<div style={{ margin: "20px 0", display: "flex", gap: 10 }}>
 				<Button
-					text="Clear Selection"
-					onClick={clearSelection}
-					disabled={solved || selection.length === 0}
+					text="Save"
+					onClick={() => updatePuzzle(puzzleId, newPuzzleName, newPuzzleData)}
 				/>
 				<Button
-					text="Verify"
-					onClick={checkSelection}
-					disabled={solved || selection.length !== 4}
+					backgroundColor="darkred"
+					text="Delete"
+					onClick={() => deletePuzzle(puzzleId)}
 				/>
-				{/* <Button text="Cheat" onClick={() => solvePuzzle(puzzleId, 100)} /> */}
 			</div>
-
-			<div>{hint}</div>
 		</div>
 	);
 };
 
-export default PlayableConnections;
+export default EditableConnections;

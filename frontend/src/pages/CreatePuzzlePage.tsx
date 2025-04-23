@@ -1,14 +1,23 @@
+import Button from "@/components/Button";
 import Header from "@/components/Header";
-import { Link } from "react-router";
+import { createPuzzle } from "@/hooks/usePuzzle";
+import { Link, useNavigate } from "react-router";
 
 const CreatePuzzlePage = () => {
+	const navigate = useNavigate();
+
+	const handleCreate = (type: string) => async () => {
+		const res = await createPuzzle(type);
+		if (res.variant === "ok") navigate(`/puzzles/${res.value}/edit`);
+	};
+
 	return (
 		<div>
 			<Header text="Create a Puzzle" />
 			Select a puzzle type to create:
 			<br />
 			<br />
-			<Link to="/create-puzzle/mini">Mini</Link>
+			<Button onClick={handleCreate("mini")} text="Create Mini" />
 			<div>
 				The "mini" is a small, 5x5 square word puzzle where you fill in words
 				based on given clues. Each clue corresponds to a row ("across") or
@@ -19,7 +28,7 @@ const CreatePuzzlePage = () => {
 				as possible for an extra challenge.
 			</div>
 			<br />
-			<Link to="/create-puzzle/connections">Connections</Link>
+			<Button onClick={handleCreate("connections")} text="Create Connections" />
 			<div>
 				The "connections" puzzle is a fun and challenging word game where you
 				are given a grid of words, and your task is to find the connections
