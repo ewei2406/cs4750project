@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import EditablePuzzle from "@/components/Puzzles/EditablePuzzle";
 import PuzzleLink from "@/components/Puzzles/PuzzleLink";
 import PuzzleStats from "@/components/Puzzles/PuzzleStats";
 import { useAuth } from "@/hooks/useAuth";
@@ -34,6 +35,8 @@ const EditPuzzlePage = () => {
 	return (
 		<div>
 			<Header text={`Editing Puzzle: ${dataResult.value.puzzleName}`} />
+
+			<EditablePuzzle {...dataResult.value} />
 
 			<PuzzleStats puzzle={dataResult.value} />
 

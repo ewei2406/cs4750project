@@ -24,17 +24,13 @@ const PlayableMini = ({
 
 	const handleChange =
 		(idx: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
-			console.log("e", e);
 			const letter = e.target.value.toUpperCase().slice(-1);
-			console.log("letter", letter);
 			if (letter.match(/^[A-Z]$/)) {
 				setCharacter(idx, letter);
 			} else {
 				setCharacter(idx, " ");
 			}
 		};
-
-	console.log("hintLetter", hintLetter);
 
 	return (
 		<div style={{ display: "flex", justifyContent: "center", gap: 20 }}>
@@ -65,6 +61,7 @@ const PlayableMini = ({
 								></div>
 							) : (
 								<input
+									disabled={solved}
 									type="text"
 									key={`${i}`}
 									value={l === " " ? "" : l}

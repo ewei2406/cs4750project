@@ -78,9 +78,7 @@ export const useConnections = (
 			);
 			setHint("Great job!");
 			setSelection([]);
-			console.log(unusedWords.length);
 			if (unusedWords.length === 4) {
-				console.log("solved");
 				setHint("You solved it!");
 				setSolved(true);
 				const delta = Math.floor((new Date().getTime() - startTime) / 1000);
