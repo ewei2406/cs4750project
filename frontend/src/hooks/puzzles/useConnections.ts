@@ -1,6 +1,6 @@
 import { PuzzleData } from "@/util/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { solvePuzzle } from "./usePuzzle";
+import { solvePuzzle } from "../usePuzzle";
 
 export type ConnectionsWord = {
 	word: string;
@@ -20,7 +20,6 @@ export const useConnections = (
 ) => {
 	const [solved, setSolved] = useState(false);
 	const startTime = useMemo(() => new Date().getTime(), []);
-	const [duration, setDuration] = useState<number>(0);
 	const [hint, setHint] = useState<string>("");
 	const [selection, setSelection] = useState<ConnectionsWord[]>([]);
 	const [solvedGroups, setSolvedGroups] = useState<ConnectionsWordGroup[]>([]);
@@ -38,13 +37,6 @@ export const useConnections = (
 			.flat()
 			.sort(() => Math.random() - 0.5)
 	);
-
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setDuration(Math.floor((new Date().getTime() - startTime) / 1000));
-		}, 1000);
-		return () => clearInterval(interval);
-	}, []);
 
 	const toggleWord = useCallback(
 		(word: ConnectionsWord) => {
@@ -113,7 +105,6 @@ export const useConnections = (
 		solvedGroups,
 		unusedWords,
 		selection,
-		duration,
 		solved,
 		clearSelection,
 		toggleWord,

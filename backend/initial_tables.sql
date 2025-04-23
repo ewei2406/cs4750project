@@ -60,8 +60,8 @@ create table if not exists Attempts(
 create table if not exists Minis (
 	puzzle_id int primary key references Puzzles(puzzle_id) on delete cascade,
 	
-	-- The mini is a grid of 5x5 letters, like a crossword. Spaces are where 'gaps' are
-	solution char(25) not null default 'aaaaaaaaaaaaaaaaaaaaaaaaa',
+	-- The mini is a grid of 5x5 letters, like a crossword. Underscore are where 'gaps' are
+	solution char(25) not null default '_aaaaaaaaaaaaaaaaaaaaaaa_',
 
 	-- Crossword clues
 	across1 varchar(255) not null default 'across1',
@@ -76,7 +76,7 @@ create table if not exists Minis (
 	down4 varchar(255) not null default 'down4',
 	down5 varchar(255) not null default 'down5',
 
-	constraint solution_constraint check (solution ~ '^[a-z ]{25}$')
+	constraint solution_constraint check (solution ~ '^[a-z_]{25}$')
 );
 
 -- connections subclass

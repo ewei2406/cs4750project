@@ -1,7 +1,6 @@
 from typing import Literal, Union
 
 from pydantic import Field
-
 from src.model.models import CamelModel, PuzzleStats
 
 

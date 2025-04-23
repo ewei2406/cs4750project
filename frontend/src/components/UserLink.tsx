@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { FaUser } from "react-icons/fa";
+import { useAuth } from "@/hooks/useAuth";
 
 const UserLink = ({
 	username,
@@ -8,6 +9,9 @@ const UserLink = ({
 	username: string;
 	userId: number;
 }) => {
+	const user = useAuth();
+	const isSelf = user.type === "user" && user.userId === userId;
+
 	return (
 		<div
 			style={{
@@ -22,7 +26,7 @@ const UserLink = ({
 				style={{ color: "inherit", textDecoration: "none" }}
 				to={`/users/${userId}`}
 			>
-				{username}
+				{username} {isSelf && "(Me)"}
 			</Link>
 		</div>
 	);

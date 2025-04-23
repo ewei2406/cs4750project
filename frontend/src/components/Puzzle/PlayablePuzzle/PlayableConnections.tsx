@@ -4,7 +4,7 @@ import {
 	ConnectionsWord,
 	ConnectionsWordGroup,
 	useConnections,
-} from "@/hooks/useConnections";
+} from "@/hooks/puzzles/useConnections";
 import { COLOR_MAP } from "@/util/constants";
 import { PuzzleData } from "@/util/types";
 
@@ -105,7 +105,7 @@ const PlayableConnections = ({
 				))}
 			</div>
 
-			<div style={{ display: "flex", gap: 5, margin: 5 }}>
+			<div style={{ display: "flex", gap: 5 }}>
 				<Button
 					text="Clear Selection"
 					onClick={clearSelection}

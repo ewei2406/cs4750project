@@ -31,6 +31,7 @@ const Button = ({
 				fontWeight: 600,
 				padding: "0.2em 0.4em",
 				borderRadius: fontSize / 2,
+				whiteSpace: "nowrap",
 				color: "white",
 				backgroundColor: backgroundColor ?? "#555",
 				cursor: disabled ? "not-allowed" : "pointer",
