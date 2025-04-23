@@ -6,9 +6,12 @@ import { UserStatsRow } from "@/components/Tables/UserTable";
 import { useGet } from "@/hooks/useGet";
 import { UserStats } from "@/util/types";
 import { useParams } from "react-router-dom";
+import { authStore, useAuth } from "@/hooks/useAuth";
+import Button from "@/components/Button";
 
 const UserPage = () => {
 	const { userId } = useParams();
+	const user = useAuth();
 
 	const { dataResult } = useGet<UserStats>({
 		path: `users/${userId}/stats`,
@@ -26,6 +29,8 @@ const UserPage = () => {
 		);
 	}
 
+	const isOwnPage = user.type === "user" && user.userId === dataResult.value.userId;
+
 	return (
 		<div>
 			<Header
@@ -34,6 +39,7 @@ const UserPage = () => {
 					(dataResult.value.isAdmin ? " (Admin)" : "")
 				}
 			/>
+
 			id: {dataResult.value.userId}
 			<Header text="User Stats" />
 			<div style={{ border: "1px solid lightgray", borderRadius: 5 }}>
@@ -54,6 +60,13 @@ const UserPage = () => {
 				endpoint={`users/${dataResult.value.userId}/attempts`}
 				queryKey={["users", dataResult.value.userId.toString(), "attempts"]}
 			/>
+
+			{/* Logout button at the bottom if it's their own page */}
+			{isOwnPage && (
+				<div style={{ marginTop: 30 }}>
+					<Button text="Log out" onClick={authStore.logout} />
+				</div>
+			)}
 		</div>
 	);
 };
