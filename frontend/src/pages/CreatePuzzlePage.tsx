@@ -17,6 +17,16 @@ const boxStyle = {
 	color: "inherit",
 };
 
+const miniBoxStyle = {
+	...boxStyle,
+	backgroundColor: "#f0f8ff", // light blue
+};
+
+const connectionsBoxStyle = {
+	...boxStyle,
+	backgroundColor: "#f5fff0", // light green
+};
+
 const CreatePuzzlePage = () => {
 	const navigate = useNavigate();
 
@@ -31,33 +41,33 @@ const CreatePuzzlePage = () => {
 			<Paragraph text="Select a puzzle type to create" />
 			<div style={{ display: "flex", gap: "40px", marginTop: "20px" }}>
 				{/* Mini Puzzle Box */}
-				<div style={boxStyle} onClick={handleCreate("mini")}>
+				<div style={miniBoxStyle} onClick={handleCreate("mini")}>
 					<MdOutlineGrid4X4 size={100} style={{ marginBottom: "10px" }} />
-					<div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "10px", color: "#007bff" }}>
+					<div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "10px", color: "#007bff", fontFamily: "'Libre Franklin', serif" }}>
 						Mini
 					</div>
 					<Paragraph text="The 'mini' is a small, 5x5 square word puzzle where you fill in words
-						based on given clues. Each clue corresponds to a row ('across') or
-						column ('down'), and the answer fits into the grid. The goal is to fill
-						in all the correct words, using logic, vocabulary, and wordplay. Because
-						it's small, it usually takes just a few minutes to finish, making it a
-						quick and fun mental exercise. Some people even try to solve it as fast
-						as possible for an extra challenge." />
+// 						based on given clues. Each clue corresponds to a row ('across') or
+// 						column ('down'), and the answer fits into the grid. The goal is to fill
+// 						in all the correct words, using logic, vocabulary, and wordplay. Because
+// 						it's small, it usually takes just a few minutes to finish, making it a
+// 						quick and fun mental exercise. Some people even try to solve it as fast
+// 						as possible for an extra challenge." />
 				</div>
 
 				{/* Connections Puzzle Box */}
-				<div style={boxStyle} onClick={handleCreate("connections")}>
+				<div style={connectionsBoxStyle} onClick={handleCreate("connections")}>
 					<PiSquaresFourFill size={100} style={{ marginBottom: "10px" }} />
-					<div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "10px", color: "#28a745" }}>
+					<div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "10px", color: "#28a745", fontFamily: "'Libre Franklin', serif" }}>
 						Connections
 					</div>
 					<Paragraph text="The 'connections' puzzle is a fun and challenging word game where you
-						are given a grid of words, and your task is to find the connections
-						between them. The goal is to identify groups of words that share a
-						common theme or category. For example, you might have a grid with words
-						like 'apple,' 'banana,' 'carrot,' and 'broccoli,' and the connection
-						would be 'food.' It's a great way to test your vocabulary and lateral
-						thinking skills!" />
+// 						are given a grid of words, and your task is to find the connections
+// 						between them. The goal is to identify groups of words that share a
+// 						common theme or category. For example, you might have a grid with words
+// 						like 'apple,' 'banana,' 'carrot,' and 'broccoli,' and the connection
+// 						would be 'food.' It's a great way to test your vocabulary and lateral
+// 						thinking skills!" />
 				</div>
 			</div>
 		</div>
