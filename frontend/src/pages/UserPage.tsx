@@ -31,7 +31,6 @@ const UserPage = () => {
 	);
 
 	useEffect(() => {
-		console.log("UserPage dataResult", dataResult);
 		if (isOwnPage && dataResult.variant === "error") {
 			if (confirm("Failed to load your profile. Do you want to log out?")) {
 				authStore.logout();
