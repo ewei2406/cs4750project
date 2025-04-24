@@ -19,15 +19,18 @@ const PuzzlePage = () => {
 	});
 
 	if (dataResult.variant === "loading") {
+		document.title = "Loading puzzle...";
 		return <div>Loading puzzle...</div>;
 	}
 
 	if (dataResult.variant === "error") {
+		document.title = "Puzzle not found!";
 		return (
 			<div>Error: {dataResult.error.detail ?? "Unknown error occurred."}</div>
 		);
 	}
 
+	document.title = `Playing Puzzle: ${dataResult.value.puzzleName}`;
 	const userIsAdmin = user.type === "user" && user.isAdmin;
 	const userIsCreator =
 		user.type === "user" && user.userId === dataResult.value.createdUserId;

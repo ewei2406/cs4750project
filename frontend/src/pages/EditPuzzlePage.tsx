@@ -17,10 +17,12 @@ const EditPuzzlePage = () => {
 	});
 
 	if (dataResult.variant === "loading") {
+		document.title = "Loading puzzle...";
 		return <div>Loading puzzle...</div>;
 	}
 
 	if (dataResult.variant === "error") {
+		document.title = "Puzzle not found!";
 		return (
 			<div>Error: {dataResult.error.detail ?? "Unknown error occurred."}</div>
 		);
@@ -29,8 +31,11 @@ const EditPuzzlePage = () => {
 	const userIsCreator =
 		user.type === "user" && user.userId === dataResult.value.createdUserId;
 	if (!userIsCreator) {
+		document.title = "Unauthorized";
 		return <div>You are not authorized to edit this puzzle.</div>;
 	}
+	
+	document.title = `Editing Puzzle: ${dataResult.value.puzzleName}`;
 
 	return (
 		<div>

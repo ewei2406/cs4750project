@@ -41,14 +41,18 @@ const UserPage = () => {
 	}, [dataResult, isOwnPage]);
 
 	if (dataResult.variant === "loading") {
+		document.title = "Loading user...";
 		return <div>Loading user...</div>;
 	}
 
 	if (dataResult.variant === "error") {
+		document.title = "User not found!";
 		return (
 			<div>Error: {dataResult.error.detail ?? "Unknown error occurred."}</div>
 		);
 	}
+
+	document.title = `User Profile: ${dataResult.value.username}`;
 
 	return (
 		<div style={{ padding: 20 }}>

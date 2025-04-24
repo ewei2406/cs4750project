@@ -35,6 +35,8 @@ const CreatePuzzlePage = () => {
 		if (res.variant === "ok") navigate(`/puzzles/${res.value}/edit`);
 	};
 
+	document.title = "Create Puzzle";
+
 	return (
 		<div style={{ padding: "20px" }}>
 			<Header text="Create a Puzzle" />

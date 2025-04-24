@@ -3,6 +3,8 @@ import UserTable from "@/components/Tables/UserTable";
 import { GrTrophy } from "react-icons/gr";
 
 const LeaderboardPage = () => {
+	document.title = "Leaderboard";
+
 	return (
 		<div style={{ padding: 20 }}>
 			{/* Leaderboard Section */}

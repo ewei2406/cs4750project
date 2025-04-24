@@ -5,6 +5,9 @@ import { GrTrophy } from "react-icons/gr";
 import { IoIosTimer } from "react-icons/io";
 
 const HomePage = () => {
+
+	document.title = "Puzzle Party";
+
 	return (
 		<div style={{ padding: 20 }}>
 			{/* Recent Puzzles Section */}
