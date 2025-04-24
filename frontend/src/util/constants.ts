@@ -4,8 +4,8 @@ const PROTOCOL = window.location.protocol;
 
 export const API_ENDPOINT_BASE =
 	window.location.hostname === "localhost" && window.location.port === "5173"
-		? PROTOCOL + "//localhost:8000/"
-		: "/";
+		? PROTOCOL + "//localhost:8000/api/"
+		: "/api/";
 
 export const PUZZLE_TYPE_COLORS: Record<Puzzle["puzzleType"], string> = {
 	connections: "var(--connections-color)",
